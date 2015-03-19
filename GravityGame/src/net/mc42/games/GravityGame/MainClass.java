@@ -1,5 +1,4 @@
 package net.mc42.games.GravityGame;
-import net.mc42.games.GravityGame.GUI.TextAreaDemo;
 import net.mc42.global.Global;
 
 import org.newdawn.slick.AppGameContainer;
@@ -8,14 +7,8 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 
-import de.matthiasmann.twl.GUI;
-import de.matthiasmann.twl.renderer.lwjgl.LWJGLRenderer;
-import de.matthiasmann.twl.theme.ThemeManager;
-
 public class MainClass extends BasicGame
 {
-	private static GUI gui;
-	
 	public MainClass(String gamename)
 	{
 		super(gamename);
@@ -57,18 +50,6 @@ public class MainClass extends BasicGame
 				// TODO Auto-generated catch block
 				Global.log(Global.levels.WARNING, "Error occured while setting icons... Continuing", e);
 			}
-			LWJGLRenderer renderer;
-		
-			renderer = new LWJGLRenderer();
-        	TextAreaDemo demo = new TextAreaDemo();
-        	gui = new GUI(demo, renderer);
-
-        	ThemeManager theme;
-		
-			theme = ThemeManager.createThemeManager(
-			        TextAreaDemo.class.getResource("demo.xml"), renderer);
-			gui.applyTheme(theme);
-		
 			appgc.start();
 		}
 		catch (Exception ex)
