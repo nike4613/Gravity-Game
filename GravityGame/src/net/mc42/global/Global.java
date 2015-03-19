@@ -14,7 +14,7 @@ public class Global {
 	}
 	
 	public static void setDebugMode(boolean b){
-		debugMsgLocation = b;
+		debugMsgLocation = b || (System.getProperty("net.mc42.global.logger.debugMode")=="true")?true:false;
 	}
 	
 	public static boolean getDebugMode() {
@@ -55,15 +55,15 @@ public class Global {
 		SEVERE ("Severe"),
 		DEBUG ("Debug");
 		
-		private final String unlocName;
+		private final String locName;
 
 		levels(String s){
-			unlocName = s;
+			locName = s;
 		}
 		
 		public String getLocalizedName() {
 			// TODO Auto-generated method stub
-			return unlocName;
+			return locName;
 		}
 	}
 	
