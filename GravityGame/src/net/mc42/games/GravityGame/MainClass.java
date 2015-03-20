@@ -18,7 +18,15 @@ public class MainClass extends BasicGame
 	}
 
 	@Override
-	public void init(GameContainer gc) throws SlickException {}
+	public void init(GameContainer gc) {
+		try {
+			f1 = new CustomFont("/resources/font/basefont.zip");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			Global.log(Global.levels.SEVERE, "Could not initialize game!", e);
+			System.exit(1);
+		}
+	}
 
 	@Override
 	public void update(GameContainer gc, int i) throws SlickException {}
@@ -53,7 +61,6 @@ public class MainClass extends BasicGame
 				// TODO Auto-generated catch block
 				Global.log(Global.levels.WARNING, "Error occured while setting icons... Continuing", e);
 			}
-			f1 = new CustomFont("resources/font/basefont.zip");
 			appgc.start();
 		}
 		catch (Exception ex)

@@ -21,20 +21,13 @@ public class Global {
 		return debugMsgLocation;
 	}
 	
-	private static String getMethodName(final int depth)
+	public static String getClassName(int depth)
     {
       final StackTraceElement[] ste = new Throwable().getStackTrace();
+      depth = depth+3;
 
       //System. out.println(ste[ste.length-depth].getClassName()+"#"+ste[ste.length-depth].getMethodName());
-      return ste[ste.length - depth].getMethodName();
-    }
-	
-	public static String getClassName(final int depth)
-    {
-      final StackTraceElement[] ste = new Throwable().getStackTrace();
-
-      //System. out.println(ste[ste.length-depth].getClassName()+"#"+ste[ste.length-depth].getMethodName());
-      return ste[ste.length - depth].getClassName() + "[" + getMethodName(depth) + "]";
+      return ste[depth].getClassName() + "[" + ste[depth].getMethodName() + "]";
     }
 	
 	public static void log(Global.levels l, String msg){

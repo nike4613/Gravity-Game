@@ -1,6 +1,5 @@
 package net.mc42.games.fonts;
 
-import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,32 +25,39 @@ public class CustomFont {
 		loadFontFile(fontfile);
 	}
 	
+	@SuppressWarnings("unchecked")
 	private void loadFontFile(String filename) throws Exception{
-		ZipInputStream file = new ZipInputStream(new FileInputStream(filename));
+		ZipInputStream file = new ZipInputStream(/*new FileInputStream*/(getClass().getResourceAsStream(filename)));
 		ZipEntry e;
-		byte[] buffer = new byte[4096];
-		byte[] image = new byte[4096];
-		String text = new String("");
+		byte[] rdbuffer = new byte[1024];
+		ArrayList<Byte> buffer = new ArrayList<Byte>();
+		ArrayList<Byte> image = new ArrayList<Byte>();
+		String text = new String();
 		while((e = file.getNextEntry()) != null){
+			buffer = new ArrayList<Byte>();
 			Global.log(Global.levels.DEBUG, "Found file " + e.getName() + " in font file " + filename);
 			int len = 0;
-			while((len = file.read(buffer))>0){
+			while((len = file.read(rdbuffer))>0){
+				for(byte b:rdbuffer)
+					buffer.add(b);
 				Global.log(Global.levels.DEBUG, "Read " + len + " bytes from file " + filename + "!" + e.getName());
 			}
 			if(e.getName() == "icons.png"){
-				image = buffer;
+				image = (ArrayList<Byte>) buffer.clone();
 			}
 			if(e.getName() == "charmap.map"){
-				text = new String(buffer);
+				for(byte b:buffer)
+					text += (char)b;
 			}
 		}
 		name = filename;
 		file.close();
-		loadImages(image);
+		Global.log(Global.levels.DEBUG, text);
 		loadCharacters(text);
+		loadImages(image);
 	}
 	
-	private void loadImages(final byte[] image) throws Exception{
+	private void loadImages(ArrayList<Byte> image) throws Exception{
 		Image i = ImageUtils.getImageFromBytes(image);
 		if(i.getWidth()!=i.getHeight()&&(i.getWidth()%16)!=0) 
 			throw new FontLoadException("The image file for font " + name + " is incorrectly proportioned!");
@@ -60,11 +66,12 @@ public class CustomFont {
 	
 	private void loadCharacters(String text) throws Exception{
 		List<String> lines = new ArrayList<>();
+		Global.log(Global.levels.DEBUG, "Text: " + text);
 		while(text.indexOf('\n')>0){
 			lines.add(text.substring(0, text.indexOf('\n')).trim());
 			text = text.substring(text.indexOf('\n')).trim();
 		}
-		for(int linenum = 0;linenum<16;linenum++){
+		for(int linenum = 0;linenum<lines.size();linenum++){
 			if(lines.get(linenum).length()>16)
 				throw new FontLoadException("The map file for font " + name + " is incorrectly proportioned!");
 			int i = 0;

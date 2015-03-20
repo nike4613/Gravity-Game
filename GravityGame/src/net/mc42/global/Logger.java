@@ -9,7 +9,7 @@ class Logger implements ILogger{
 		Date d = new Date(); 
 		String prefix = "[" + DateFormat.getTimeInstance(DateFormat.MEDIUM).format(d) + 
 				"][" + Thread.currentThread().getName() + 
-				"][" + l.getLocalizedName() + "]" + ((Global.getDebugMode())?"(in class " + Global.getClassName(1) + ")":"") + ": ";
+				"][" + l.getLocalizedName() + "]" + ((Global.getDebugMode())?"(in class " + Global.getClassName(0) + ")":"") + ": ";
 		String out = prefix;
 		
 		if(msg != null){
