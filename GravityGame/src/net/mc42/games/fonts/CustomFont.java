@@ -40,7 +40,7 @@ public class CustomFont {
 			while((len = file.read(rdbuffer))>0){
 				for(byte b:rdbuffer)
 					buffer.add(b);
-				Global.log(Global.levels.DEBUG, "Read " + len + " bytes from file " + filename + "!" + e.getName());
+				Global.log(Global.levels.DEBUG, "Read " + len + " bytes from file " + filename + "!" + e.getName() + " -- " + new String(rdbuffer));
 			}
 			if(e.getName() == "icons.png"){
 				image = (ArrayList<Byte>) buffer.clone();
@@ -49,6 +49,7 @@ public class CustomFont {
 				for(byte b:buffer)
 					text += (char)b;
 			}
+			Global.log(Global.levels.DEBUG, text);
 		}
 		name = filename;
 		file.close();
