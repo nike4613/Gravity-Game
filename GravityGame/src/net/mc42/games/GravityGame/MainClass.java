@@ -1,4 +1,5 @@
 package net.mc42.games.GravityGame;
+import net.mc42.games.fonts.CustomFont;
 import net.mc42.global.Global;
 
 import org.newdawn.slick.AppGameContainer;
@@ -9,6 +10,8 @@ import org.newdawn.slick.SlickException;
 
 public class MainClass extends BasicGame
 {
+	static CustomFont f1;
+	
 	public MainClass(String gamename)
 	{
 		super(gamename);
@@ -50,6 +53,7 @@ public class MainClass extends BasicGame
 				// TODO Auto-generated catch block
 				Global.log(Global.levels.WARNING, "Error occured while setting icons... Continuing", e);
 			}
+			f1 = new CustomFont("resources/font/basefont.zip");
 			appgc.start();
 		}
 		catch (Exception ex)

@@ -12,6 +12,7 @@ import net.mc42.games.ImageUtils;
 import net.mc42.global.Global;
 import net.mc42.global.Pair;
 
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SpriteSheet;
 
@@ -40,7 +41,7 @@ public class CustomFont {
 			if(e.getName() == "icons.png"){
 				image = buffer;
 			}
-			if(e.getName() == "charmap.txt"){
+			if(e.getName() == "charmap.map"){
 				text = new String(buffer);
 			}
 		}
@@ -57,13 +58,30 @@ public class CustomFont {
 		font = new SpriteSheet(i, i.getWidth()/16, i.getHeight()/16);
 	}
 	
-	private void loadCharacters(String text){
+	private void loadCharacters(String text) throws Exception{
 		List<String> lines = new ArrayList<>();
 		while(text.indexOf('\n')>0){
-			lines.add(text.substring(0, text.indexOf('\n')));
-			text = text.substring(text.indexOf('\n'));
+			lines.add(text.substring(0, text.indexOf('\n')).trim());
+			text = text.substring(text.indexOf('\n')).trim();
 		}
-		
+		for(int linenum = 0;linenum<16;linenum++){
+			if(lines.get(linenum).length()>16)
+				throw new FontLoadException("The map file for font " + name + " is incorrectly proportioned!");
+			int i = 0;
+			for(byte c:lines.get(linenum).getBytes()){
+				charmap.put((char) c, new Pair<Integer,Integer>(i, linenum));
+				i++;
+			}
+		}
+	}
+	
+	public void drawStr(Graphics g, String msg, int sz, int x, int y){
+		for(byte ch:msg.getBytes()){
+			char c = (char) ch;
+			
+			font.getSprite(charmap.get(c).first, charmap.get(c).last).getScaledCopy(sz, sz).draw(x, y);
+			x+=font.getWidth()/font.getHorizontalCount();
+		}
 	}
 	
 }
