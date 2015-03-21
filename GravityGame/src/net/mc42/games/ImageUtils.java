@@ -20,4 +20,13 @@ public class ImageUtils {
 		fo.close();
 		return new Image(System.getProperty("user.dir") + "/tmp/decoder.png");
 	}
+	public static void tileImageToApproxSize(Image i, int x, int y, int szx, int szy){
+		int tilex = (szx/i.getWidth())+1;
+		int tiley = (szy/i.getHeight())+1;
+		for(int px = 0;px<tilex;px++){
+			for(int py = 0;py<tiley;py++){
+				i.draw(x+(px*i.getWidth()), y+(py*i.getHeight()));
+			}
+		}
+	}
 }

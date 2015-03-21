@@ -97,6 +97,10 @@ public class CustomFont implements Font {
 			x+=sz;
 		}
 	}
+	
+	public String getName(){
+		return name;
+	}
 
 	@Override
 	public int getWidth(String str) {

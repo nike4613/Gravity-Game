@@ -1,21 +1,19 @@
 package net.mc42.games.GravityGame;
-import java.util.HashMap;
-import java.util.Map;
-
-import net.mc42.games.fonts.CustomFont;
+import net.mc42.games.fonts.Fonts;
+import net.mc42.games.gui.GUI;
 import net.mc42.global.Global;
 
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.Color;
-import org.newdawn.slick.Font;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 
 public class MainClass extends BasicGame
 {
-	static Map<String,Font> fonts = new HashMap<>();
+
+	GUI gui;
 	
 	public MainClass(String gamename)
 	{
@@ -25,7 +23,8 @@ public class MainClass extends BasicGame
 	@Override
 	public void init(GameContainer gc) {
 		try {
-			fonts.put("altchars", new CustomFont("basefont"));
+			Fonts.addFont("basefont");
+			gui = new GUI("resources/gui/gui.png", "resources/gui/frikken.xml");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			Global.log(Global.levels.SEVERE, "Could not initialize game!", e);
@@ -41,9 +40,10 @@ public class MainClass extends BasicGame
 	{
 		g.setColor(Color.white);
 		g.drawString("Howdy!", 100, 100);
-		g.setFont(fonts.get("altchars"));
+		g.setFont(Fonts.getFont("basefont"));
 		g.setColor(Color.red);
 		g.drawString("AHAhahaHAHahAaH!\naHAHahahHAhahAHAha!", 10, 120);
+		gui.draw(10, 180, 286, 100);
 		
 	}
 
