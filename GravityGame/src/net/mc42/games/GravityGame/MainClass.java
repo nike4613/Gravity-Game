@@ -1,5 +1,6 @@
 package net.mc42.games.GravityGame;
 import net.mc42.games.fonts.CustomFont;
+import net.mc42.games.fonts.FontException;
 import net.mc42.global.Global;
 
 import org.newdawn.slick.AppGameContainer;
@@ -35,6 +36,12 @@ public class MainClass extends BasicGame
 	public void render(GameContainer gc, Graphics g) throws SlickException
 	{
 		g.drawString("Howdy!", 100, 100);
+		try {
+			f1.drawStr("aaaahahahahahahaha!", 32, 10, 120);
+		} catch (FontException e) {
+			// TODO Auto-generated catch block
+			Global.log(Global.levels.WARNING, e);
+		}
 	}
 
 	public static void main(String[] args)

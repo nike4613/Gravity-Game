@@ -12,7 +12,6 @@ import net.mc42.global.ByteString;
 import net.mc42.global.Global;
 import net.mc42.global.Pair;
 
-import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SpriteSheet;
 
@@ -64,6 +63,7 @@ public class CustomFont {
 		if(i.getWidth()!=i.getHeight()&&(i.getWidth()%16)!=0) 
 			throw new FontLoadException("The image file for font " + name + " is incorrectly proportioned!");
 		font = new SpriteSheet(i, i.getWidth()/16, i.getHeight()/16);
+		font.setFilter(SpriteSheet.FILTER_NEAREST);
 	}
 	
 	private void loadCharacters(String text) throws Exception{
@@ -84,12 +84,15 @@ public class CustomFont {
 		}
 	}
 	
-	public void drawStr(Graphics g, String msg, int sz, int x, int y){
+	public void drawStr(String msg, int sz, int x, int y) throws FontException{
 		for(byte ch:msg.getBytes()){
 			char c = (char) ch;
-			
-			font.getSprite(charmap.get(c).first, charmap.get(c).last).getScaledCopy(sz, sz).draw(x, y);
-			x+=font.getWidth()/font.getHorizontalCount();
+			try{
+				font.getSubImage(charmap.get(c).first, charmap.get(c).last).getScaledCopy(sz, sz).draw(x, y);
+			} catch (NullPointerException e){
+				throw new FontException("Undefined character in input!");
+			}
+			x+=sz;
 		}
 	}
 	

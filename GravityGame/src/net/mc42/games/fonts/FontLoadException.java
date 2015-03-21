@@ -1,6 +1,6 @@
 package net.mc42.games.fonts;
 
-public class FontLoadException extends Exception {
+public class FontLoadException extends FontException {
 
 	/**
 	 * 
