@@ -1,17 +1,21 @@
 package net.mc42.games.GravityGame;
+import java.util.HashMap;
+import java.util.Map;
+
 import net.mc42.games.fonts.CustomFont;
-import net.mc42.games.fonts.FontException;
 import net.mc42.global.Global;
 
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.BasicGame;
+import org.newdawn.slick.Color;
+import org.newdawn.slick.Font;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 
 public class MainClass extends BasicGame
 {
-	static CustomFont f1;
+	static Map<String,Font> fonts = new HashMap<>();
 	
 	public MainClass(String gamename)
 	{
@@ -21,7 +25,7 @@ public class MainClass extends BasicGame
 	@Override
 	public void init(GameContainer gc) {
 		try {
-			f1 = new CustomFont("/resources/font/basefont.zip");
+			fonts.put("altchars", new CustomFont("basefont"));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			Global.log(Global.levels.SEVERE, "Could not initialize game!", e);
@@ -35,13 +39,12 @@ public class MainClass extends BasicGame
 	@Override
 	public void render(GameContainer gc, Graphics g) throws SlickException
 	{
+		g.setColor(Color.white);
 		g.drawString("Howdy!", 100, 100);
-		try {
-			f1.drawStr("aaaahahahahahahaha!", 32, 10, 120);
-		} catch (FontException e) {
-			// TODO Auto-generated catch block
-			Global.log(Global.levels.WARNING, e);
-		}
+		g.setFont(fonts.get("altchars"));
+		g.setColor(Color.red);
+		g.drawString("AHAhahaHAHahAaH!\naHAHahahHAhahAHAha!", 10, 120);
+		
 	}
 
 	public static void main(String[] args)

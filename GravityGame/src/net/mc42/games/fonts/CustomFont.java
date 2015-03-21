@@ -12,17 +12,19 @@ import net.mc42.global.ByteString;
 import net.mc42.global.Global;
 import net.mc42.global.Pair;
 
+import org.newdawn.slick.Color;
+import org.newdawn.slick.Font;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SpriteSheet;
 
-public class CustomFont {
+public class CustomFont implements Font {
 	
 	private SpriteSheet font;
 	private Map<Character,Pair<Integer,Integer>> charmap = new HashMap<>();
 	private String name;
 	
 	public CustomFont(String fontfile) throws Exception{
-		loadFontFile(fontfile);
+		loadFontFile("/resources/font/" + fontfile + ".font");
 	}
 	
 	private void loadFontFile(String filename) throws Exception{
@@ -93,6 +95,61 @@ public class CustomFont {
 				throw new FontException("Undefined character in input!");
 			}
 			x+=sz;
+		}
+	}
+
+	@Override
+	public int getWidth(String str) {
+		// TODO Auto-generated method stub
+		return str.length()*font.getWidth()/font.getHorizontalCount();
+	}
+
+	@Override
+	public int getHeight(String str) {
+		// TODO Auto-generated method stub
+		return font.getHeight()/font.getVerticalCount();
+	}
+
+	@Override
+	public int getLineHeight() {
+		// TODO Auto-generated method stub
+		return font.getHeight()/font.getVerticalCount();
+	}
+
+	@Override
+	public void drawString(float x, float y, String text) {
+		// TODO Auto-generated method stub
+		drawString(x,y,text,Color.white);
+	}
+
+	@Override
+	public void drawString(float x, float y, String text, Color col) {
+		// TODO Auto-generated method stub
+		drawString(x,y,text,col,0,text.length());
+	}
+
+	@Override
+	public void drawString(float x, float y, String text, Color col,
+			int startIndex, int endIndex) {
+		text = text.substring(startIndex, endIndex);
+		// TODO Auto-generated method stub
+		float xs = x;
+		int sz = getWidth("tenroujima")/"tenroujima".length();
+		for(byte ch:text.getBytes()){
+			char c = (char) ch;
+			if(c=='\n'){
+				y+=getHeight("tenroujima");
+				xs=x;
+				continue;
+			}
+			try{
+				Image i = font.getSubImage(charmap.get(c).first, charmap.get(c).last).getScaledCopy(sz, sz);
+				i.setImageColor(col.r, col.g, col.b, col.a);
+				i.draw(xs, y);
+			} catch (NullPointerException e){
+				Global.log(Global.levels.WARNING, e);
+			}
+			xs+=sz;
 		}
 	}
 	
