@@ -1,6 +1,7 @@
 package net.mc42.games.GravityGame;
 import net.mc42.games.fonts.Fonts;
 import net.mc42.games.gui.GUI;
+import net.mc42.games.gui.GUIs;
 import net.mc42.games.gui.testwiget;
 import net.mc42.global.Global;
 
@@ -12,11 +13,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 
 public class MainClass extends BasicGame
-{
-
-	GUI gui;
-	public static AppGameContainer appgc;
-	
+{	
 	public MainClass(String gamename)
 	{
 		super(gamename);
@@ -26,7 +23,8 @@ public class MainClass extends BasicGame
 	public void init(GameContainer gc) {
 		try {
 			Fonts.addFont("basefont");
-			gui = new GUI("resources/gui/gui.png", "resources/gui/frikken.xml", new testwiget());
+			new GUI("testgui", new testwiget());
+			GUIs.getGUI("testgui").setPos(10, 180, 300, 250);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			Global.log(Global.levels.SEVERE, "Could not initialize game!", e);
@@ -35,7 +33,13 @@ public class MainClass extends BasicGame
 	}
 
 	@Override
-	public void update(GameContainer gc, int i) throws SlickException {}
+	public void update(GameContainer gc, int i) throws SlickException 
+	{try {
+		GUIs.updateGUIs(gc, i);
+	} catch (Exception e) {
+			// TODO Auto-generated catch block
+		Global.log(Global.levels.SEVERE, "Error while updating game!", e);
+	}}
 
 	@Override
 	public void render(GameContainer gc, Graphics g)throws SlickException
@@ -46,7 +50,7 @@ public class MainClass extends BasicGame
 		g.setColor(Color.red);
 		g.drawString("AHAhahaHAHahAaH!\naHAHahahHAhahAHAha!", 10, 120);
 		
-		gui.draw(10, 180, 200, 200, g);
+		GUIs.drawGUIs(g);
 	} catch (Exception e) {
 			// TODO Auto-generated catch block
 		Global.log(Global.levels.SEVERE, "Error in Game.render()", e);
@@ -62,7 +66,7 @@ public class MainClass extends BasicGame
 		//System.exit(0);;
 		try
 		{
-			appgc = new AppGameContainer(new MainClass("Simple Slick Game"));
+			AppGameContainer appgc = new AppGameContainer(new MainClass("Simple Slick Game"));
 			appgc.setDisplayMode(640, 480, false);
 			appgc.setTargetFrameRate(60);
 			appgc.setShowFPS(false);

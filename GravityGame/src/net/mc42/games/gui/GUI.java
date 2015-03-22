@@ -1,8 +1,11 @@
 package net.mc42.games.gui;
 
+import java.io.File;
+
 import net.mc42.games.ImageUtils;
 import net.mc42.global.Pair;
 
+import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.util.xml.XMLElement;
@@ -25,6 +28,7 @@ public class GUI {
 	private int sepspace = 0;
 	private int margin = 3;
 	private Widget widget;
+	private int x,y,szx,szy = 0;
 	
 	/***********************************************************************
 	 * Constructs a new GUI object from image and XML file using widget w. *
@@ -33,10 +37,13 @@ public class GUI {
 	 * @param w The widget to use                                          *
 	 * @throws Exception                                                   *
 	 ***********************************************************************/
-	public GUI(String imgfile,String sectfile, Widget w) throws Exception{
+	public GUI(String name, Widget w) throws Exception{this(name,w,true);}
+	public GUI(String name, Widget w, boolean active) throws Exception{
+		String imgfile = (new File("/resources/gui/" + name + ".png").isFile())?"/resources/gui/" + name + ".png":"/resources/gui/guis.png";
+		String sectfile = "/resources/gui/" + name + ".xml";
 		XMLParser xml = new XMLParser();
-		XMLElement el = xml.parse(sectfile);
-		Image im = new Image(imgfile);
+		XMLElement el = xml.parse(name, getClass().getResourceAsStream(sectfile));
+		Image im = new Image(getClass().getResourceAsStream(imgfile),name,false);
 		im.setFilter(Image.FILTER_NEAREST);
 		widget = w;
 		
@@ -56,6 +63,23 @@ public class GUI {
 				sepspace = e.getIntAttribute("value");
 			}*/
 		}
+		GUIs.regGUI(this, name, true);
+	}
+	
+	public void update(GameContainer container, int timeinms) throws Exception{
+		widget.update(container, timeinms);
+	}
+	
+	public GUI setPos(int x, int y, int szx, int szy){
+		this.x = x;
+		this.y = y;
+		this.szx = szx;
+		this.szy = szy;
+		return this;
+	}
+	
+	public void draw(Graphics g) throws Exception{
+		draw(x,y,szx,szy,g);
 	}
 	
 	/**
