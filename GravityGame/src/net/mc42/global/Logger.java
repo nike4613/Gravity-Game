@@ -31,5 +31,6 @@ class Logger implements ILogger{
 				System.out.println(sb.toString() + "in " + e.toString());	
 			}
 		}
+		if(l==Global.levels.SEVERE) System.exit(1);
 	}
 }

@@ -3,6 +3,7 @@ package net.mc42.games.gui;
 import net.mc42.games.ImageUtils;
 import net.mc42.global.Pair;
 
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.util.xml.XMLElement;
 import org.newdawn.slick.util.xml.XMLParser;
@@ -20,18 +21,31 @@ public class GUI {
 			{ChangeProperties.NONE,ChangeProperties.TILE_HOR,ChangeProperties.NONE}
 	};
 	protected ChangeProperties[][] props = propsEdgeScaling;
+	private boolean tiling = false;
 	private int sepspace = 0;
+	private int margin = 3;
+	private Widget widget;
 	
-	public GUI(String imgfile,String sectfile) throws Exception{
+	/***********************************************************************
+	 * Constructs a new GUI object from image and XML file using widget w. *
+	 * @param imgfile The image (can contain multiple guis)                *
+	 * @param sectfile XML file (can contain only one gui)                 *
+	 * @param w The widget to use                                          *
+	 * @throws Exception                                                   *
+	 ***********************************************************************/
+	public GUI(String imgfile,String sectfile, Widget w) throws Exception{
 		XMLParser xml = new XMLParser();
 		XMLElement el = xml.parse(sectfile);
 		Image im = new Image(imgfile);
 		im.setFilter(Image.FILTER_NEAREST);
+		widget = w;
 		
 		//process xml
 		if(el.getName()!="gui") throw new Exception("Sections XML file supposed to be format '<gui><sect></sect>...</gui>'");
 		sepspace = el.getIntAttribute("seperation");
 		props = (el.getBooleanAttribute("tiling"))?propsEdgeTiling:propsEdgeScaling;
+		tiling = el.getBooleanAttribute("tiling");
+		margin = el.getIntAttribute("margin");
 		for(int i = 0;i<el.getChildren().size();i++){
 			XMLElement e = el.getChildren().get(i);
 			if(e.getName()=="sect"){
@@ -44,21 +58,23 @@ public class GUI {
 		}
 	}
 	
-	public void setSeperationSpace(int s){
-		sepspace = s;
-	}
-	
-	public void draw(int x, int y, int szx, int szy){
-		draw(x, y, szx, szy, null);
-	}
-	
-	public void draw(int x, int y, int szx, int szy, Widget w){
+	/**
+	 * Draws GUI at x,y with size szx,szy.
+	 * @param x The x pos
+	 * @param y The y pos
+	 * @param szx The x size
+	 * @param szy The y size 
+	 * @throws Exception
+	 */
+	public void draw(int x, int y, int szx, int szy, Graphics g) throws Exception{
 		int inx,iny=0;
 		int cx=x;
 		int cy=y;
-		inx=(int) (x+ss[0][0].getWidth());
-		iny=(int) (y+ss[0][0].getHeight());
+		inx=(int) (x+ss[0][0].getWidth()+margin+sepspace);
+		iny=(int) (y+ss[0][0].getHeight()+margin+sepspace);
+		//Global.log(Global.levels.DEBUG, "draw");
 		Image todraw = null;
+		Pair<Integer,Integer> pal = null;
 		xloop:
 		for(int px = 0;px<3;px++){
 			for(int py = 0;py<3;py++){
@@ -77,12 +93,19 @@ public class GUI {
 					todraw = ss[py][px].getScaledCopy(ss[py][px].getWidth(), szy);
 					break;
 				case TILE:{
-					;
-					cy+=ImageUtils.tileImageToApproxSize(ss[py][px], cx, cy, szx, szy).last+sepspace;
+					
+					
+					if(px==1&&py==1){
+						inx=cx+margin;
+						iny=cy+margin;
+						//szx=p.first-sepspace*2;
+						//szy=p.last-sepspace*2;
+					}
+					cy+=(pal=ImageUtils.tileImageToApproxSize(ss[py][px], cx, cy, szx, szy)).last+sepspace;
 					continue;
 				}
 				case TILE_VER:{
-					cy+=ImageUtils.tileImageToApproxSize(ss[py][px], cx, cy, 1, szy).last+sepspace;
+					cy+=(ImageUtils.tileImageToApproxSize(ss[py][px], cx, cy, 1, szy)).last+sepspace;
 					continue;
 				}
 				case TILE_HOR:{
@@ -105,8 +128,15 @@ public class GUI {
 			cy=y;
 			cx+=todraw.getWidth()+sepspace;
 		}
-		if(w!=null)
-			w.draw(inx, iny, szx, szy);
+		if(tiling){
+			szx=pal.first-margin*2;
+			szy=pal.last-margin*2;
+		} else {
+			szx=szx-margin*2;
+			szy=szy-margin*2;
+		}
+		if(widget!=null)
+			widget.draw(inx, iny, szx, szy, g);
 	}
 	
 }
