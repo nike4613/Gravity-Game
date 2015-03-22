@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 
 import net.mc42.global.ByteString;
+import net.mc42.global.Pair;
 
 import org.newdawn.slick.Image;
 
@@ -20,7 +21,7 @@ public class ImageUtils {
 		fo.close();
 		return new Image(System.getProperty("user.dir") + "/tmp/decoder.png");
 	}
-	public static void tileImageToApproxSize(Image i, int x, int y, int szx, int szy){
+	public static Pair<Integer,Integer> tileImageToApproxSize(Image i, int x, int y, int szx, int szy){
 		int tilex = (szx/i.getWidth())+1;
 		int tiley = (szy/i.getHeight())+1;
 		for(int px = 0;px<tilex;px++){
@@ -28,5 +29,6 @@ public class ImageUtils {
 				i.draw(x+(px*i.getWidth()), y+(py*i.getHeight()));
 			}
 		}
+		return new Pair<Integer,Integer>(tilex*i.getWidth(), tiley*i.getHeight());
 	}
 }

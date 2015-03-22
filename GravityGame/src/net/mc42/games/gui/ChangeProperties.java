@@ -5,5 +5,5 @@ public enum ChangeProperties {
 	SCALE,
 	SCALE_VER,
 	SCALE_HOR,
-	TILE;
+	TILE, TILE_HOR, TILE_VER;
 }
