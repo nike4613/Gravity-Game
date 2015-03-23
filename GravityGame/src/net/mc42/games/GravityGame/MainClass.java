@@ -1,16 +1,9 @@
 package net.mc42.games.GravityGame;
-import net.mc42.games.fonts.Fonts;
-import net.mc42.games.gui.GUI;
-import net.mc42.games.gui.GUIs;
-import net.mc42.games.gui.testwiget;
-import net.mc42.global.Global;
+import net.mc42.games.fonts.*;
+import net.mc42.games.gui.*;
+import net.mc42.global.*;
 
-import org.newdawn.slick.AppGameContainer;
-import org.newdawn.slick.BasicGame;
-import org.newdawn.slick.Color;
-import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.SlickException;
+import org.newdawn.slick.*;
 
 public class MainClass extends BasicGame
 {	
@@ -23,8 +16,8 @@ public class MainClass extends BasicGame
 	public void init(GameContainer gc) {
 		try {
 			Fonts.addFont("basefont");
-			new GUI("testgui", new testwiget());
-			GUIs.getGUI("testgui").setPos(10, 180, 300, 250);
+			new GUI("testgui", new BasicWidget());
+			GUIs.getGUI("testgui").setPos(10, 180, 600, 250);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			Global.log(Global.levels.SEVERE, "Could not initialize game!", e);
