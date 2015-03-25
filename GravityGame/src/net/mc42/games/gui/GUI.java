@@ -29,6 +29,7 @@ public class GUI {
 	private int margin = 3;
 	private Widget widget;
 	private int x,y,szx,szy = 0;
+	private String name;
 	
 	/***********************************************************************
 	 * Constructs a new GUI object from image and XML file using widget w. *
@@ -63,6 +64,11 @@ public class GUI {
 				sepspace = e.getIntAttribute("value");
 			}*/
 		}
+		this.name = name;
+		//GUIs.regGUI(this, name, true);
+	}
+	
+	public void reg(){
 		GUIs.regGUI(this, name, true);
 	}
 	

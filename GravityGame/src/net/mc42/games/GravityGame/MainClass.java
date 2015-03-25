@@ -16,8 +16,7 @@ public class MainClass extends BasicGame
 	public void init(GameContainer gc) {
 		try {
 			Fonts.addFont("basefont");
-			new GUI("testgui", new BasicWidget());
-			GUIs.getGUI("testgui").setPos(10, 180, 600, 250);
+			new GUI("testgui", new BasicWidget()).setPos(10, 180, 600, 250).reg();;
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			Global.log(Global.levels.SEVERE, "Could not initialize game!", e);
