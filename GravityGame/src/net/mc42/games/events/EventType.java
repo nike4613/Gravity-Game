@@ -10,7 +10,9 @@ public enum EventType {
 	HOVERIN,
 	HOVEROUT,
 	MOUSEWHEELUP,
-	MOUSEWHEELDOWN;
+	MOUSEWHEELDOWN,
+	MOUSEMOVE,
+	DRAG;
 	private int val = 0;
 	public EventType setVal(int i){val=i;return this;}
 	public int getVal(){return val;}

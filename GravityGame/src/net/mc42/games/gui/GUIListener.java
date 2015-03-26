@@ -1,21 +1,21 @@
-package net.mc42.games.gui.menu;
+package net.mc42.games.gui;
 
+import net.mc42.games.events.DragEvent;
 import net.mc42.games.events.Event;
 import net.mc42.games.events.EventType;
+import net.mc42.global.Global;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.InputListener;
 
-public class MenuListener implements InputListener {
+public class GUIListener implements InputListener {
 
-	private Menu parent;
 	private boolean accepting = true;
 	private Input input;
 	private GameContainer gc;
 	
-	public MenuListener(Menu parent, Input input, GameContainer c){
-		this.parent = parent;
+	public GUIListener(Input input, GameContainer c){
 		this.input = input;
 		this.gc = c;
 	}
@@ -27,37 +27,42 @@ public class MenuListener implements InputListener {
 	@Override
 	public void mouseWheelMoved(int change) {
 		// TODO Auto-generated method stub
-		parent.processEvents(new Event(gc, ((change>0)?EventType.MOUSEWHEELUP:EventType.MOUSEDOWN).setVal(change), 0, 0));
+		GUIs.processEvents(new Event(gc, ((change>0)?EventType.MOUSEWHEELUP:EventType.MOUSEDOWN).setVal(change), 0, 0));
 	}
 
 	@Override
 	public void mouseClicked(int button, int x, int y, int clickCount) {
 		// TODO Auto-generated method stub
-
+		GUIs.processEvents(new Event(gc, EventType.CLICK.setVal(button), x, y));
 	}
 
 	@Override
 	public void mousePressed(int button, int x, int y) {
 		// TODO Auto-generated method stub
-
+		GUIs.processEvents(new Event(gc, EventType.MOUSEDOWN.setVal(button), x, y));
 	}
 
 	@Override
 	public void mouseReleased(int button, int x, int y) {
 		// TODO Auto-generated method stub
-
+		GUIs.processEvents(new Event(gc, EventType.MOUSEUP.setVal(button), x, y));
 	}
 
 	@Override
 	public void mouseMoved(int oldx, int oldy, int newx, int newy) {
 		// TODO Auto-generated method stub
-
+		GUIs.processEvents(new Event(gc, EventType.MOUSEMOVE, newx, newy));
 	}
 
 	@Override
 	public void mouseDragged(int oldx, int oldy, int newx, int newy) {
 		// TODO Auto-generated method stub
-
+		try {
+			GUIs.processEvents(new DragEvent((GameContainer) Global.mainShare.get(null),oldx,oldy,newx,newy));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			Global.log(Global.levels.WARNING, e);
+		} 
 	}
 
 	@Override
@@ -87,13 +92,13 @@ public class MenuListener implements InputListener {
 	@Override
 	public void keyPressed(int key, char c) {
 		// TODO Auto-generated method stub
-
+		GUIs.processEvents(new Event(gc, EventType.KEYDOWN.setVal(key), 0,0));
 	}
 
 	@Override
 	public void keyReleased(int key, char c) {
 		// TODO Auto-generated method stub
-
+		GUIs.processEvents(new Event(gc, EventType.KEYUP.setVal(key), 0,0));
 	}
 
 	@Override

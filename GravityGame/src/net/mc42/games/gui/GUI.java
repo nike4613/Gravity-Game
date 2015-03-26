@@ -83,6 +83,10 @@ public class GUI {
 		this.szy = szy;
 		return this;
 	}
+	public Pair<Pair<Integer,Integer>,Pair<Integer,Integer>> getPos(){
+		return new Pair<Pair<Integer,Integer>,Pair<Integer,Integer>>
+			(new Pair<Integer,Integer>(x,y), new Pair<Integer,Integer>(szx,szy));
+	}
 	
 	public void draw(Graphics g) throws Exception{
 		draw(x,y,szx,szy,g);
@@ -100,6 +104,8 @@ public class GUI {
 		int inx,iny=0;
 		int cx=x;
 		int cy=y;
+		szx=szx-(ss[0][0].getWidth()*2);
+		szy=szy-(ss[0][0].getHeight()*2);
 		inx=(int) (x+ss[0][0].getWidth()+margin+sepspace);
 		iny=(int) (y+ss[0][0].getHeight()+margin+sepspace);
 		//Global.log(Global.levels.DEBUG, "draw");

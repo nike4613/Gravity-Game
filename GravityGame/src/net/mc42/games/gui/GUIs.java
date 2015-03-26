@@ -4,12 +4,19 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import net.mc42.games.events.Event;
+import net.mc42.global.Global;
+
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 
 public class GUIs {
 	private static Map<String,GUI> guis = new HashMap<>();
 	private static Map<String,Boolean> actives = new HashMap<>();
+	
+	protected static void processEvents(Event e){
+		
+	}
 	
 	public static void regGUI(GUI gui, String name, boolean active){
 		guis.put(name, gui);

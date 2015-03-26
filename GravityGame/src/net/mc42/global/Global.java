@@ -1,12 +1,49 @@
 package net.mc42.global;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.lang.reflect.Field;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+
 public class Global {
 
 	private static ILogger logger = new Logger();
 	private static boolean debugMsgLocation = false;
+	public static Field mainShare;
 	
 	static {
 		debugMsgLocation = (System.getProperty("net.mc42.global.logger.debugMode")=="true")?true:false;
+	}
+	
+	static {		
+		//Global.log(Global.levels.DEBUG, "Before main()");
+		try {
+		String dottedPackage = "";
+        List<Class<?>> classes = new ArrayList<Class<?>>();
+        URL upackage = ClassLoader.getSystemClassLoader().getResource("");
+
+        BufferedReader dis = new BufferedReader(new InputStreamReader((InputStream) upackage.getContent()));
+        String line = null;
+        while ((line = dis.readLine()) != null) {
+            if(line.endsWith(".class")) {
+               
+				classes.add(Class.forName(dottedPackage+"."+line.substring(0,line.lastIndexOf('.'))));
+			
+            }
+        }
+        for(Class<?> c:classes){
+        	if(c.getAnnotation(BaseClass.class)!=null){
+        		mainShare = c.getDeclaredField("globalShare");
+        		break;
+        	}
+        }
+        } catch (Exception e) {
+				// TODO Auto-generated catch block
+			Global.log(levels.WARNING, e);
+		}
 	}
 	
 	public static void setLogger(Class<ILogger> log) throws InstantiationException, IllegalAccessException{

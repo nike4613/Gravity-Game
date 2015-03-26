@@ -5,8 +5,12 @@ import net.mc42.global.*;
 
 import org.newdawn.slick.*;
 
+@BaseClass
 public class MainClass extends BasicGame
 {	
+	
+	public static GameContainer globalShare;
+	
 	public MainClass(String gamename)
 	{
 		super(gamename);
@@ -15,8 +19,9 @@ public class MainClass extends BasicGame
 	@Override
 	public void init(GameContainer gc) {
 		try {
+			MainClass.globalShare = gc;
 			Fonts.addFont("basefont");
-			new GUI("testgui", new BasicWidget()).setPos(10, 180, 600, 250).reg();;
+			new GUI("testgui", new BasicWidget()).setPos(10, 180, 600, 250).reg();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			Global.log(Global.levels.SEVERE, "Could not initialize game!", e);
