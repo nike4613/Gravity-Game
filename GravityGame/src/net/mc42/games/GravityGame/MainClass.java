@@ -21,7 +21,7 @@ public class MainClass extends BasicGame
 		try {
 			MainClass.globalShare = gc;
 			Fonts.addFont("basefont");
-			new GUI("testgui", new BasicWidget()).setPos(10, 180, 600, 250).reg();
+			new GUI("testgui", new BasicWidget()).setPos(10, 180, 600, 250).reg(0);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			Global.log(Global.levels.SEVERE, "Could not initialize game!", e);

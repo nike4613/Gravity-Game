@@ -23,7 +23,7 @@ public class Event {
 		this.y=y;
 	}
 	
-	protected Pair<Integer,Integer> getPos(){
+	public Pair<Integer,Integer> getPos(){
 		return new Pair<>(x,y);
 		
 	}

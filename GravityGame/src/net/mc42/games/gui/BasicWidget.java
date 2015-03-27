@@ -1,5 +1,6 @@
 package net.mc42.games.gui;
 
+import net.mc42.games.events.Event;
 import net.mc42.games.fonts.Fonts;
 
 import org.newdawn.slick.GameContainer;
@@ -34,6 +35,12 @@ public class BasicWidget implements Widget{
 		// TODO Auto-generated method stub
 		s = s_px_s0023890[cur++];
 		if(cur>=s_px_s0023890.length) cur = 0;
+	}
+
+	@Override
+	public void processEvents(Event e) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

@@ -3,6 +3,7 @@ package net.mc42.games.gui;
 import java.io.File;
 
 import net.mc42.games.ImageUtils;
+import net.mc42.games.events.Event;
 import net.mc42.global.Pair;
 
 import org.newdawn.slick.GameContainer;
@@ -68,12 +69,16 @@ public class GUI {
 		//GUIs.regGUI(this, name, true);
 	}
 	
-	public void reg(){
-		GUIs.regGUI(this, name, true);
+	public void reg(int order){
+		GUIs.regGUI(this, name, true, order);
 	}
 	
 	public void update(GameContainer container, int timeinms) throws Exception{
 		widget.update(container, timeinms);
+	}
+	
+	public void processEvents(Event e){
+		widget.processEvents(e);
 	}
 	
 	public GUI setPos(int x, int y, int szx, int szy){
@@ -83,6 +88,7 @@ public class GUI {
 		this.szy = szy;
 		return this;
 	}
+	
 	public Pair<Pair<Integer,Integer>,Pair<Integer,Integer>> getPos(){
 		return new Pair<Pair<Integer,Integer>,Pair<Integer,Integer>>
 			(new Pair<Integer,Integer>(x,y), new Pair<Integer,Integer>(szx,szy));

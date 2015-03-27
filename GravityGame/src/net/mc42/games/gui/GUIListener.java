@@ -1,9 +1,7 @@
 package net.mc42.games.gui;
 
-import net.mc42.games.events.DragEvent;
 import net.mc42.games.events.Event;
 import net.mc42.games.events.EventType;
-import net.mc42.global.Global;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Input;
@@ -12,11 +10,9 @@ import org.newdawn.slick.InputListener;
 public class GUIListener implements InputListener {
 
 	private boolean accepting = true;
-	private Input input;
 	private GameContainer gc;
 	
 	public GUIListener(Input input, GameContainer c){
-		this.input = input;
 		this.gc = c;
 	}
 	
@@ -56,19 +52,11 @@ public class GUIListener implements InputListener {
 
 	@Override
 	public void mouseDragged(int oldx, int oldy, int newx, int newy) {
-		// TODO Auto-generated method stub
-		try {
-			GUIs.processEvents(new DragEvent((GameContainer) Global.mainShare.get(null),oldx,oldy,newx,newy));
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			Global.log(Global.levels.WARNING, e);
-		} 
+		
 	}
 
 	@Override
 	public void setInput(Input input) {
-		// TODO Auto-generated method stub
-		this.input = input;
 	}
 
 	@Override

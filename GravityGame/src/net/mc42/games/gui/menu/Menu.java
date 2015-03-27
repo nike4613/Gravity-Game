@@ -2,13 +2,12 @@ package net.mc42.games.gui.menu;
 
 import java.util.ArrayList;
 
+import net.mc42.games.events.Event;
+import net.mc42.games.gui.Widget;
+import net.mc42.global.Global;
+
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Input;
-
-import net.mc42.games.events.Event;
-import net.mc42.games.gui.GUIListener;
-import net.mc42.games.gui.Widget;
 
 public class Menu implements Widget {
 	
@@ -17,7 +16,6 @@ public class Menu implements Widget {
 	
 	public Menu(GameContainer c, String n){
 		name = n;
-		Input input = c.getInput();
 	}
 	
 	public void addElement(MenuElement e){
@@ -28,17 +26,16 @@ public class Menu implements Widget {
 	public void draw(int x, int y, int szx, int szy, Graphics g)
 			throws Exception {
 		// TODO Auto-generated method stub
+		Global.log(Global.levels.DEBUG, name);
 		
 	}
 	
-	protected void processEvents(Event e){
+	public void processEvents(Event e){
 		
 	}
 
 	@Override
 	public void update(GameContainer c, int timeinms) throws Exception {
-		// TODO Auto-generated method stub
-		Input input = c.getInput();
 	}
 
 }
