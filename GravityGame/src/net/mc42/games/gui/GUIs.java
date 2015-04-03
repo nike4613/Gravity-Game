@@ -7,7 +7,9 @@ import java.util.Map.Entry;
 
 import net.mc42.games.events.Event;
 import net.mc42.games.events.EventType;
+import net.mc42.global.Global;
 
+import org.lwjgl.input.Keyboard;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 
@@ -15,27 +17,72 @@ public class GUIs {
 	private static Map<String,GUI> guis = new HashMap<>();
 	private static Map<String,Boolean> actives = new HashMap<>();
 	private static ArrayList<String> renderOrder = new ArrayList<>();
+	private static GameContainer gc;
+	private static int exitKey = Keyboard.KEY_ESCAPE;
 	private static String selUI = "";
 	
+	public static void init(GameContainer g, int exitkey){
+		gc = g;
+		exitKey = exitkey;
+		gc.getInput().addListener(new GUIListener(gc.getInput(), gc));
+		Global.log(Global.levels.INFO, "GUIs initialized");
+	}
 	
 	protected static void processEvents(Event e){
-		if(e.getType() == EventType.MOUSEMOVE){
+		Global.log(Global.levels.DEBUG, selUI);
+		if(e.getType().equals(EventType.MOUSEMOVE)){
+			Global.log(Global.levels.DEBUG, "mousemoves");
 			int x = e.getPos().first;
 			int y = e.getPos().last;
+			//x = Math.abs(x-gc.getWidth());
+			//y = Math.abs(y-gc.getHeight());
 			
 			for(String name:renderOrder){
 				if(getActive(name)){
-					if(getGUI(name).getPos().first.first>=x&&getGUI(name).getPos().last.first<=x
-							&&getGUI(name).getPos().first.last>=y&&getGUI(name).getPos().last.last<=y){
+					if(getGUI(name).getPos().first.first>=x&&getGUI(name).getPos().last.first+getGUI(name).getPos().first.first<=x
+							&&getGUI(name).getPos().first.last>=y&&getGUI(name).getPos().last.last+getGUI(name).getPos().first.last<=y){
 						selUI = name;
+						Global.log(Global.levels.DEBUG, "foundgui " + name);
 						getGUI(name).processEvents(e);
 						break;
 					}
 				}
 			}
 		}
-		if(e.getType() == EventType.CLICK){
+		if(e.getType().equals(EventType.MOUSEDOWN)){
+			int x = e.getPos().first;
+			int y = e.getPos().last;
+			//x = Math.abs(x-gc.getWidth());
+			//y = Math.abs(y-gc.getHeight());
 			
+			for(String name:renderOrder){
+				if(getActive(name)){
+					if(getGUI(name).getPos().first.first>=x&&getGUI(name).getPos().last.first+getGUI(name).getPos().first.first<=x
+							&&getGUI(name).getPos().first.last>=y&&getGUI(name).getPos().last.last+getGUI(name).getPos().first.last<=y){
+						selUI = name;
+						getGUI(name).processEvents(e);
+						break;
+					} else {
+						selUI = "";
+					}
+				} else {
+					selUI = "";
+				}
+			}
+		}
+		if(e.getType().equals(EventType.MOUSEUP)){
+			if(selUI=="") return;
+			getGUI(selUI).processEvents(e);
+		}
+		if(e.getType().equals(EventType.KEYDOWN)){
+			if(selUI=="") return;
+			if(e.getType().getVal() == exitKey) gc.exit();
+			getGUI(selUI).processEvents(e);
+		}
+		if(e.getType().equals(EventType.KEYUP)){
+			if(selUI=="") return;
+			if(e.getType().getVal() == exitKey) gc.exit();
+			getGUI(selUI).processEvents(e);
 		}
 	}
 	

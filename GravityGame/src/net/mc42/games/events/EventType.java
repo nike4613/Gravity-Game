@@ -9,8 +9,7 @@ public enum EventType {
 	KEYUP,
 	MOUSEWHEELUP,
 	MOUSEWHEELDOWN,
-	MOUSEMOVE,
-	DRAG;
+	MOUSEMOVE;
 	private int val = 0;
 	public EventType setVal(int i){val=i;return this;}
 	public int getVal(){return val;}

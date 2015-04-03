@@ -3,6 +3,7 @@ import net.mc42.games.fonts.*;
 import net.mc42.games.gui.*;
 import net.mc42.global.*;
 
+import org.lwjgl.input.Keyboard;
 import org.newdawn.slick.*;
 
 @BaseClass
@@ -21,6 +22,7 @@ public class MainClass extends BasicGame
 		try {
 			MainClass.globalShare = gc;
 			Fonts.addFont("basefont");
+			GUIs.init(gc, Keyboard.KEY_ESCAPE);
 			new GUI("testgui", new BasicWidget()).setPos(10, 180, 600, 250).reg(0);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
