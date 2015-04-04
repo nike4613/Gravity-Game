@@ -29,7 +29,7 @@ public class GUIListener implements InputListener {
 	@Override
 	public void mouseClicked(int button, int x, int y, int clickCount) {
 		// TODO Auto-generated method stub
-		GUIs.processEvents(new Event(gc, EventType.CLICK.setVal(button), x, y));
+		//GUIs.processEvents(new Event(gc, EventType.CLICK.setVal(button), x, y));
 	}
 
 	@Override
@@ -52,7 +52,7 @@ public class GUIListener implements InputListener {
 
 	@Override
 	public void mouseDragged(int oldx, int oldy, int newx, int newy) {
-		
+		GUIs.processEvents(new Event(gc,EventType.DRAG,newx,newy));
 	}
 
 	@Override

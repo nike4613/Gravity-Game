@@ -4,6 +4,8 @@ import net.mc42.games.gui.*;
 import net.mc42.global.*;
 
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.opengl.Display;
+import org.lwjgl.opengl.DisplayMode;
 import org.newdawn.slick.*;
 
 @BaseClass
@@ -23,7 +25,7 @@ public class MainClass extends BasicGame
 			MainClass.globalShare = gc;
 			Fonts.addFont("basefont");
 			GUIs.init(gc, Keyboard.KEY_ESCAPE);
-			new GUI("testgui", new BasicWidget()).setPos(10, 180, 600, 250).reg(0);
+			new GUI("testgui", new BasicWidget()).setPos(50, 180, 600, 250).reg(0);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			Global.log(Global.levels.SEVERE, "Could not initialize game!", e);
@@ -47,7 +49,7 @@ public class MainClass extends BasicGame
 		g.drawString("Howdy!", 100, 100);
 		g.setFont(Fonts.getFont("basefont"));
 		g.setColor(Color.red);
-		g.drawString("AHAhahaHAHahAaH!\naHAHahahHAhahAHAha!", 10, 120);
+		g.drawString("AHAhahaHAHahAaH!\naHAHahahHAhahAHAha!", 100, 120);
 		
 		GUIs.drawGUIs(g);
 	} catch (Exception e) {
@@ -65,9 +67,17 @@ public class MainClass extends BasicGame
 		//System.exit(0);;
 		try
 		{
+			DisplayMode best = new DisplayMode(0, 0);
+			for(DisplayMode ds:Display.getAvailableDisplayModes()){
+				if(ds.getFrequency()>=60&&ds.isFullscreenCapable()&&ds.getBitsPerPixel()>=24){
+					if(ds.getHeight()>best.getHeight()&&ds.getWidth()>best.getWidth()) best = ds;
+				}
+			}
+			Global.log(Global.levels.DEBUG, "Display mode is as follows: " + best.toString());
+			
 			AppGameContainer appgc = new AppGameContainer(new MainClass("Simple Slick Game"));
-			appgc.setDisplayMode(640, 480, false);
-			appgc.setTargetFrameRate(60);
+			appgc.setDisplayMode(/*best.getWidth()*/640, /*best.getHeight()*/480, false);
+			appgc.setTargetFrameRate(/*best.getFrequency()*/60);
 			appgc.setShowFPS(false);
 			try {
 				//appgc.setIcon("resources/icon/gameIcon.png");

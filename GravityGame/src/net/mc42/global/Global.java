@@ -15,7 +15,8 @@ public class Global {
 	public static Field mainShare;
 	
 	static {
-		debugMsgLocation = (System.getProperty("net.mc42.global.logger.debugMode")=="true")?true:false;
+		debugMsgLocation = (System.getProperty("loggerdebugMode")=="true")?true:false;
+		
 	}
 	
 	static {		
@@ -37,6 +38,8 @@ public class Global {
         for(Class<?> c:classes){
         	if(c.getAnnotation(BaseClass.class)!=null){
         		mainShare = c.getDeclaredField("globalShare");
+
+        		//exitMethod = c.getDeclaredMethod("onExit");
         		break;
         	}
         }
@@ -51,7 +54,7 @@ public class Global {
 	}
 	
 	public static void setDebugMode(boolean b){
-		debugMsgLocation = b || (System.getProperty("net.mc42.global.logger.debugMode")=="true")?true:false;
+		debugMsgLocation = (b || ((System.getProperty("loggerdebugMode")=="true")?true:false));
 	}
 	
 	public static boolean getDebugMode() {

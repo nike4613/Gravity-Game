@@ -7,4 +7,7 @@ public class Pair<T1,T2> {
 		first = f;
 		last = l;
 	}
+	public String toString(){
+		return "[first:\"" + first.toString() + "\",last:\"" + last.toString() + "\"]";
+	}
 }

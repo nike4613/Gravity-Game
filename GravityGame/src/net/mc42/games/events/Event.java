@@ -7,6 +7,8 @@ import org.newdawn.slick.GameContainer;
 public class Event {
 	private GameContainer gc;
 	private EventType etype;
+	private int x;
+	private int y;
 	
 	public GameContainer getGameContainer(){
 		return gc;
@@ -28,6 +30,14 @@ public class Event {
 		
 	}
 	
-	protected int x=0,y=0;
+	public Event setPos(Pair<Integer,Integer> pos){
+		x = pos.first;
+		y = pos.last;
+		return this;
+	}
+	
+	public String toString(){
+		return "{etype:\"" + etype.toString() + "\",pos:\"" + getPos().toString() + "\"}";
+	}
 	
 }

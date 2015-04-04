@@ -29,36 +29,34 @@ public class GUIs {
 	}
 	
 	protected static void processEvents(Event e){
-		Global.log(Global.levels.DEBUG, selUI);
+		try{
 		if(e.getType().equals(EventType.MOUSEMOVE)){
-			Global.log(Global.levels.DEBUG, "mousemoves");
 			int x = e.getPos().first;
 			int y = e.getPos().last;
-			//x = Math.abs(x-gc.getWidth());
-			//y = Math.abs(y-gc.getHeight());
 			
 			for(String name:renderOrder){
 				if(getActive(name)){
-					if(getGUI(name).getPos().first.first>=x&&getGUI(name).getPos().last.first+getGUI(name).getPos().first.first<=x
-							&&getGUI(name).getPos().first.last>=y&&getGUI(name).getPos().last.last+getGUI(name).getPos().first.last<=y){
+					if(getGUI(name).getPos().first.first<=x&&getGUI(name).getPos().last.first+getGUI(name).getPos().first.first>=x
+							&&getGUI(name).getPos().first.last<=y&&getGUI(name).getPos().last.last+getGUI(name).getPos().first.last>=y){
 						selUI = name;
-						Global.log(Global.levels.DEBUG, "foundgui " + name);
 						getGUI(name).processEvents(e);
 						break;
+					} else {
+						selUI = "";
 					}
+				} else {
+					selUI = "";
 				}
 			}
 		}
 		if(e.getType().equals(EventType.MOUSEDOWN)){
 			int x = e.getPos().first;
 			int y = e.getPos().last;
-			//x = Math.abs(x-gc.getWidth());
-			//y = Math.abs(y-gc.getHeight());
 			
 			for(String name:renderOrder){
 				if(getActive(name)){
-					if(getGUI(name).getPos().first.first>=x&&getGUI(name).getPos().last.first+getGUI(name).getPos().first.first<=x
-							&&getGUI(name).getPos().first.last>=y&&getGUI(name).getPos().last.last+getGUI(name).getPos().first.last<=y){
+					if(getGUI(name).getPos().first.first<=x&&getGUI(name).getPos().last.first+getGUI(name).getPos().first.first>=x
+							&&getGUI(name).getPos().first.last<=y&&getGUI(name).getPos().last.last+getGUI(name).getPos().first.last>=y){
 						selUI = name;
 						getGUI(name).processEvents(e);
 						break;
@@ -75,14 +73,44 @@ public class GUIs {
 			getGUI(selUI).processEvents(e);
 		}
 		if(e.getType().equals(EventType.KEYDOWN)){
-			if(selUI=="") return;
 			if(e.getType().getVal() == exitKey) gc.exit();
+			if(selUI=="") return;
 			getGUI(selUI).processEvents(e);
 		}
 		if(e.getType().equals(EventType.KEYUP)){
-			if(selUI=="") return;
 			if(e.getType().getVal() == exitKey) gc.exit();
+			if(selUI=="") return;
 			getGUI(selUI).processEvents(e);
+		}
+		if(e.getType().equals(EventType.MOUSEWHEELDOWN)){
+			if(selUI=="") return;
+			getGUI(selUI).processEvents(e);
+		}
+		if(e.getType().equals(EventType.MOUSEWHEELUP)){
+			if(selUI=="") return;
+			getGUI(selUI).processEvents(e);
+		}
+		if(e.getType().equals(EventType.DRAG)){
+			int x = e.getPos().first;
+			int y = e.getPos().last;
+			
+			for(String name:renderOrder){
+				if(getActive(name)){
+					if(getGUI(name).getPos().first.first<=x&&getGUI(name).getPos().last.first+getGUI(name).getPos().first.first>=x
+							&&getGUI(name).getPos().first.last<=y&&getGUI(name).getPos().last.last+getGUI(name).getPos().first.last>=y){
+						selUI = name;
+						getGUI(name).processEvents(e);
+						break;
+					} else {
+						selUI = "";
+					}
+				} else {
+					selUI = "";
+				}
+			}
+		}
+		}catch(Exception error){
+			Global.log(Global.levels.WARNING, error);
 		}
 	}
 	
@@ -90,6 +118,7 @@ public class GUIs {
 		guis.put(name, gui);
 		actives.put(name, active);
 		renderOrder.add(renderPos, name);
+		gui.processEvents(new Event(gc, EventType.INIT,0,0));
 	}
 	
 	public static void setActive(String name, boolean active){

@@ -16,6 +16,7 @@ public class BasicWidget implements Widget{
 		"w = (szx/(g.getFont().getWidth(\"TeNrOuJiMa\")/\"TeNrOuJiMa\".length()));",
 		"g.drawString(s.substring(0, (w>s.length())?s.length():w), x, y);"
 	};
+	Event lastEvent;
 	String s = "";
 	int cur = 0;
 	int w = 0;
@@ -28,6 +29,8 @@ public class BasicWidget implements Widget{
 		g.setFont(Fonts.getFont("default"));
 		w = (szx/(g.getFont().getWidth("TeNrOuJiMa")/"TeNrOuJiMa".length()));
 		g.drawString(s.substring(0, (w>s.length())?s.length():w), x, y);
+		//lastEvent = (lastEvent==null)?new Event((GameContainer) Global.mainShare.get(null), EventType.KEYDOWN, 0, 0):lastEvent;
+		g.drawString(lastEvent.toString(), x, y+30);
 	}
 
 	@Override
@@ -40,7 +43,7 @@ public class BasicWidget implements Widget{
 	@Override
 	public void processEvents(Event e) {
 		// TODO Auto-generated method stub
-		
+		lastEvent = e;
 	}
 
 }

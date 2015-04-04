@@ -4,6 +4,7 @@ import java.io.File;
 
 import net.mc42.games.ImageUtils;
 import net.mc42.games.events.Event;
+import net.mc42.games.events.EventType;
 import net.mc42.global.Pair;
 
 import org.newdawn.slick.GameContainer;
@@ -78,6 +79,10 @@ public class GUI {
 	}
 	
 	public void processEvents(Event e){
+		if(e.getType().equals(EventType.DRAG)||e.getType().equals(EventType.MOUSEMOVE)||
+				e.getType().equals(EventType.MOUSEDOWN)||e.getType().equals(EventType.MOUSEUP)){
+			e.setPos(new Pair<Integer,Integer>(e.getPos().first-getPos().first.first,e.getPos().last-getPos().first.last));
+		}
 		widget.processEvents(e);
 	}
 	

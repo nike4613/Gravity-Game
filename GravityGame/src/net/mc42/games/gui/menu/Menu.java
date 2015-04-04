@@ -18,8 +18,9 @@ public class Menu implements Widget {
 		name = n;
 	}
 	
-	public void addElement(MenuElement e){
+	public Menu addElement(MenuElement e){
 		elems.add(e);
+		return this;
 	}
 
 	@Override
