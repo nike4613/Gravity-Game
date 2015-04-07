@@ -2,6 +2,7 @@ package net.mc42.games.gui.menu;
 
 import net.mc42.games.events.Event;
 import net.mc42.games.gui.EventHandler;
+import net.mc42.global.Global;
 import net.mc42.global.Pair;
 
 import org.newdawn.slick.Font;
@@ -14,41 +15,45 @@ public class Button implements MenuElement {
 	int y=0;
 	Font f;
 	
-	@Override
-	public void draw(int x, int y, Graphics g)
+	public void draw(Graphics g)
 			throws Exception {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@EventHandler
-	public void onSelect(Event e) throws Exception {
+	public void onSelect(SelectEvent e) throws Exception {
 		// TODO Auto-generated method stub
 		
 	}
 	
 	@EventHandler
-	public void onMouseDown(Event e) throws Exception {
+	public void onMousedown(Event e) throws Exception {
 		// TODO Auto-generated method stub
 		
 	}
 	
 	@EventHandler
-	public void onMouseUp(Event e) throws Exception {
+	public void onMouseup(Event e) throws Exception {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@EventHandler
-	public void onKeyUp(Event e) throws Exception {
+	public void onKeyup(Event e) throws Exception {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@EventHandler
-	public void onKeyDown(Event e) throws Exception {
+	public void onKeydown(Event e) throws Exception {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	@EventHandler
+	public void onInit(Event e) throws Exception {
+		Global.log(Global.levels.INFO, "Button INIT event!");
 	}
 
 	@Override

@@ -6,7 +6,7 @@ import org.newdawn.slick.Font;
 import org.newdawn.slick.Graphics;
 
 public interface MenuElement {
-	public void draw(int x, int y, Graphics g)
+	public void draw(Graphics g)
 			throws Exception;
 	public MenuElement setSize(int x, int y);
 	public MenuElement setPos(int x, int y);
