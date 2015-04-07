@@ -8,4 +8,5 @@ import org.newdawn.slick.Graphics;
 public interface Widget {
 	public void draw(int x, int y, int szx, int szy, Graphics g) throws Exception;
 	public void update(GameContainer container, int timeinms) throws Exception;
-	public void processEvents(Event e);}
+	public void processEvents(Event e);
+}

@@ -1,6 +1,7 @@
 package net.mc42.games.GravityGame;
 import net.mc42.games.fonts.*;
 import net.mc42.games.gui.*;
+import net.mc42.games.gui.menu.Menu;
 import net.mc42.global.*;
 
 import org.lwjgl.input.Keyboard;
@@ -25,7 +26,7 @@ public class MainClass extends BasicGame
 			MainClass.globalShare = gc;
 			Fonts.addFont("basefont");
 			GUIs.init(gc, Keyboard.KEY_ESCAPE);
-			new GUI("testgui", new BasicWidget()).setPos(50, 180, 600, 250).reg(0);
+			new GUI( "testgui", new Menu("Test Menu").setFont( gc.getGraphics().getFont() ) ).setPos(50, 180, 200, 150).reg(0);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			Global.log(Global.levels.SEVERE, "Could not initialize game!", e);

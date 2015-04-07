@@ -1,13 +1,18 @@
 package net.mc42.games.gui.menu;
 
 import net.mc42.games.events.Event;
+import net.mc42.games.gui.EventHandler;
 import net.mc42.global.Pair;
 
+import org.newdawn.slick.Font;
 import org.newdawn.slick.Graphics;
 
 public class Button implements MenuElement {
-
-	private int xsz=0,ysz=0,x=0,y=0;
+	int xsz=0;
+	int ysz=0;
+	int x=0;
+	int y=0;
+	Font f;
 	
 	@Override
 	public void draw(int x, int y, Graphics g)
@@ -16,26 +21,42 @@ public class Button implements MenuElement {
 		
 	}
 
-	public void onClick(Event e) throws Exception {
+	@EventHandler
+	public void onSelect(Event e) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@EventHandler
+	public void onMouseDown(Event e) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@EventHandler
+	public void onMouseUp(Event e) throws Exception {
 		// TODO Auto-generated method stub
 		
 	}
 
-	public void onKeyPress(Event e) throws Exception {
+	@EventHandler
+	public void onKeyUp(Event e) throws Exception {
 		// TODO Auto-generated method stub
 		
 	}
 
+	@EventHandler
 	public void onKeyDown(Event e) throws Exception {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void setSize(int x, int y) {
+	public MenuElement setSize(int x, int y) {
 		// TODO Auto-generated method stub
 		xsz = x;
 		ysz = y;
+		return this;
 	}
 
 	@Override
@@ -45,16 +66,24 @@ public class Button implements MenuElement {
 	}
 
 	@Override
-	public void setPos(int x, int y) {
+	public MenuElement setPos(int x, int y) {
 		// TODO Auto-generated method stub
 		this.x=x;
 		this.y=y;
+		return this;
 	}
 
 	@Override
 	public Pair<Integer, Integer> getPos() {
 		// TODO Auto-generated method stub
 		return new Pair<>(x,y);
+	}
+
+	@Override
+	public MenuElement setFont(Font f) {
+		// TODO Auto-generated method stub
+		this.f = f;
+		return this;
 	}
 
 }
