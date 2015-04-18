@@ -16,9 +16,17 @@ public class MainClass extends BasicGame
 	
 	public static GameContainer globalShare;
 	
+	
 	public MainClass(String gamename)
 	{
 		super(gamename);
+	}
+	
+	int exit=0;private void checkForceExit(GameContainer gc){int is=0,tmp=exit<<8;boolean down=true;while((tmp=(tmp>>8))!=0){is=(tmp&0xFF);down = down && gc.getInput().isKeyDown(is);}if(down){exit();}}private void setExitKeys(int... keys){int i=0,out=0;for(int key:keys){out|=key<<(i++*8);}exit=out;}
+	
+	private void exit(){
+		Global.log(Global.levels.INFO, "Closing program... But why?");
+		globalShare.exit();
 	}
 
 	@Override
@@ -26,8 +34,13 @@ public class MainClass extends BasicGame
 		try {
 			MainClass.globalShare = gc;
 			Fonts.addFont("basefont");
-			GUIs.init(gc, Keyboard.KEY_ESCAPE);
-			new GUI( "testgui", new Menu("Test Menu").setFont( gc.getGraphics().getFont() ).addElement(new Button().setSize(50,50)) ).setPos(50, 180, 200, 150).reg(0);
+			GUIs.init(gc);
+			setExitKeys(Keyboard.KEY_Q,Keyboard.KEY_LCONTROL);
+			new GUI( "testgui", new Menu("Test Menu")
+				.setFont( gc.getGraphics().getFont() )
+				.setFontColor(Color.green)
+				.addElement(new Button().setSize(50,50)) 
+			).setPos(50, 180, 200, 150).reg(0);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			Global.log(Global.levels.SEVERE, "Could not initialize game!", e);
@@ -39,6 +52,7 @@ public class MainClass extends BasicGame
 	public void update(GameContainer gc, int i) throws SlickException 
 	{try {
 		GUIs.updateGUIs(gc, i);
+		checkForceExit(gc);
 	} catch (Exception e) {
 			// TODO Auto-generated catch block
 		Global.log(Global.levels.SEVERE, "Error while updating game!", e);

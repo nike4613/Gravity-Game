@@ -9,6 +9,7 @@ import net.mc42.games.gui.Widget;
 import net.mc42.global.Global;
 import net.mc42.global.Utils;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.Font;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -20,6 +21,7 @@ public class Menu implements Widget {
 	private String name;
 	private int namePos;
 	private Font font;
+	private Color color;
 	
 	public Menu(String n){
 		name = n;
@@ -33,16 +35,22 @@ public class Menu implements Widget {
 		font = e;
 		return this;
 	}
+	public Menu setFontColor(Color col){
+		color = col;
+		return this;
+	}
 
 	@Override
 	public void draw(int x, int y, int szx, int szy, Graphics g)
 			throws Exception {
 		// TODO Auto-generated method stub
 		Font tempFont = g.getFont();
+		Color tempCol = g.getColor();
 		g.setFont(font);
+		g.setColor(color);
 		
 		namePos = (szx/2)-(g.getFont().getWidth(name)/2)+x;
-		int ny = g.getFont().getHeight("HGHJSDGHJ");
+		int ny = g.getFont().getHeight("AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz");
 		g.drawString(name, namePos, y);
 		for(MenuElement el:elems){
 			el.setDrawPosOff(x, y);
@@ -52,6 +60,7 @@ public class Menu implements Widget {
 		}
 		
 		g.setFont(tempFont);
+		g.setColor(tempCol);
 	}
 	
 	public void processEvents(Event e){
@@ -68,13 +77,13 @@ public class Menu implements Widget {
 					
 					break;
 				} else selEln = -1;
-				Global.log(Global.levels.DEBUG, i + "");
+				//Global.log(Global.levels.DEBUG, i + "");
 				i++;
 			}
 			
 			//Global.log(Global.levels.DEBUG,elems.get(selEl).getClass().getName());
 			if(selEln!=selEl){
-				if(selEl!=-1&&false)
+				if(selEl!=-1)
 				Utils.getAnnotatedMethod(
 						EventHandler.class, 
 						elems.get(selEl).getClass(), 
@@ -106,7 +115,7 @@ public class Menu implements Widget {
 					e
 				);
 		} else {
-			//Global.log(Global.levels.DEBUG, "on" + e.getType().toCamelCaseType());
+			if(selEl==-1)return;
 			Utils.getAnnotatedMethod(
 					EventHandler.class, 
 					elems.get(selEl).getClass(), 

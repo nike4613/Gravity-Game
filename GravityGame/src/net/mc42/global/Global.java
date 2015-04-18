@@ -1,74 +1,11 @@
 package net.mc42.global;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.lang.reflect.Field;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-
 public class Global {
 
 	private static ILogger logger = new Logger();
 	private static boolean debugMsgLocation = false;
-	public static Field mainShare;
-	
-	static {
-		debugMsgLocation = (System.getProperty("loggerdebugMode")=="true")?true:false;
-		
-	}
-	
-	static {		
-		//Global.log(Global.levels.DEBUG, "Before main()");
-		try {
-		String dottedPackage = "";
-        List<Class<?>> classes = new ArrayList<Class<?>>();
-        URL upackage = ClassLoader.getSystemClassLoader().getResource("");
-
-        BufferedReader dis = new BufferedReader(new InputStreamReader((InputStream) upackage.getContent()));
-        String line = null;
-        while ((line = dis.readLine()) != null) {
-            if(line.endsWith(".class")) {
-               
-				classes.add(Class.forName(dottedPackage+"."+line.substring(0,line.lastIndexOf('.'))));
-			
-            }
-        }
-        for(Class<?> c:classes){
-        	if(c.getAnnotation(BaseClass.class)!=null){
-        		mainShare = c.getDeclaredField("globalShare");
-
-        		//exitMethod = c.getDeclaredMethod("onExit");
-        		break;
-        	}
-        }
-        } catch (Exception e) {
-				// TODO Auto-generated catch block
-			Global.log(levels.WARNING, e);
-		}
-	}
-	
-	public static void setLogger(Class<ILogger> log) throws InstantiationException, IllegalAccessException{
-		logger = log.newInstance();
-	}
-	
-	public static void setDebugMode(boolean b){
-		debugMsgLocation = (b || ((System.getProperty("loggerdebugMode")=="true")?true:false));
-	}
-	
-	public static boolean getDebugMode() {
-		return debugMsgLocation;
-	}
-	
-	public static String getClassName(int depth)
-    {
-      final StackTraceElement[] ste = new Throwable().getStackTrace();
-      depth = depth+3;
-
-      //System. out.println(ste[ste.length-depth].getClassName()+"#"+ste[ste.length-depth].getMethodName());
-      return ste[depth].getClassName() + "[" + ste[depth].getMethodName() + "]";
-    }
+	//public static Field mainShare;
+	//private static ExecutionEndThread end = new ExecutionEndThread();
 	
 	public static void log(Global.levels l, String msg){
 		logger.log(l, msg, null);
@@ -99,5 +36,71 @@ public class Global {
 			return locName;
 		}
 	}
+	
+	public static void setLogger(Class<ILogger> log) throws InstantiationException, IllegalAccessException{
+		logger = log.newInstance();
+	}
+	
+	public static void setDebugMode(boolean b){
+		debugMsgLocation = (b || ((System.getProperty("loggerdebugMode")=="true")?true:false));
+	}
+	
+	public static boolean getDebugMode() {
+		return debugMsgLocation;
+	}
+	
+	public static String getClassName(int depth)
+    {
+      final StackTraceElement[] ste = new Throwable().getStackTrace();
+      depth = depth+3;
+
+      //System. out.println(ste[ste.length-depth].getClassName()+"#"+ste[ste.length-depth].getMethodName());
+      return ste[depth].getClassName() + "[" + ste[depth].getMethodName() + "]";
+    }
+	
+	static {
+		debugMsgLocation = (System.getProperty("loggerdebugMode")=="true")?true:false;
+		//Runtime.getRuntime().addShutdownHook(end);
+	}
+	
+	/*public static void addEndHook(Method m){
+		end.addMethod(m);
+	}*/
+	
+	/*static {
+		debugMsgLocation=true;
+		Global.log(Global.levels.DEBUG, "Before main()");
+		//System.out.println("Before main()");
+		try {
+		String dottedPackage = "";
+        List<Class<?>> classes = new ArrayList<Class<?>>();
+        URL upackage = ClassLoader.getSystemClassLoader().getResource("");
+
+        BufferedReader dis = new BufferedReader(new InputStreamReader((InputStream) upackage.getContent()));
+        String line = null;
+        while ((line = dis.readLine()) != null) {
+            if(line.endsWith(".class")) {
+               
+				classes.add(Class.forName(line.substring(0,line.lastIndexOf('.'))));
+			
+            }
+        }
+        for(Class<?> c:classes){
+        	if(c.getAnnotation(BaseClass.class)!=null){
+        		mainShare = c.getDeclaredField("globalShare");
+
+        		//exitMethod = c.getDeclaredMethod("onExit");
+        		break;
+        	}
+        	//if(Utils.getAnnotatedMethod(ExitMethod.class, c)!=null)exits.add(Utils.getAnnotatedMethod(ExitMethod.class, c));
+        }
+        for(Class<?> c:classes){
+        	/*if(Utils.getAnnotatedMethod(ExitMethod.class, c)!=null)*exits.add(Utils.getAnnotatedMethod(ExitMethod.class, c));
+        }
+        } catch (Exception e) {
+				// TODO Auto-generated catch block
+			Global.log(levels.WARNING, e);
+		}
+	}*/
 	
 }

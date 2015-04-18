@@ -9,7 +9,6 @@ import net.mc42.games.events.Event;
 import net.mc42.games.events.EventType;
 import net.mc42.global.Global;
 
-import org.lwjgl.input.Keyboard;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 
@@ -18,12 +17,12 @@ public class GUIs {
 	private static Map<String,Boolean> actives = new HashMap<>();
 	private static ArrayList<String> renderOrder = new ArrayList<>();
 	private static GameContainer gc;
-	private static int exitKey = Keyboard.KEY_ESCAPE;
+	//private static int exitKey = Keyboard.KEY_ESCAPE;
 	private static String selUI = "";
 	
-	public static void init(GameContainer g, int exitkey){
+	public static void init(GameContainer g){
 		gc = g;
-		exitKey = exitkey;
+		//exitKey = exitkey;
 		gc.getInput().addListener(new GUIListener(gc.getInput(), gc));
 		Global.log(Global.levels.INFO, "GUIs initialized");
 	}
@@ -73,12 +72,12 @@ public class GUIs {
 			getGUI(selUI).processEvents(e);
 		}
 		if(e.getType().equals(EventType.KEYDOWN)){
-			if(e.getType().getVal() == exitKey) gc.exit();
+			//if(e.getType().getVal() == exitKey) gc.exit();
 			if(selUI=="") return;
 			getGUI(selUI).processEvents(e);
 		}
 		if(e.getType().equals(EventType.KEYUP)){
-			if(e.getType().getVal() == exitKey) gc.exit();
+			//if(e.getType().getVal() == exitKey) gc.exit();
 			if(selUI=="") return;
 			getGUI(selUI).processEvents(e);
 		}

@@ -94,7 +94,7 @@ public class Button implements MenuElement {
 		return this;
 	}
 
-	@Override
+	@EventHandler
 	public void onDeselect(DeselectEvent e) throws Exception {
 		// TODO Auto-generated method stub
 		Global.log(Global.levels.DEBUG,"I got deselected... :(");
