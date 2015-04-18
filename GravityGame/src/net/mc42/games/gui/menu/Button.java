@@ -13,42 +13,45 @@ public class Button implements MenuElement {
 	int ysz=0;
 	int x=0;
 	int y=0;
+	int offx=0;
+	int offy=0;
 	Font f;
 	
 	public void draw(Graphics g)
 			throws Exception {
 		// TODO Auto-generated method stub
-		
+		g.drawRect(x+offx, y+offy, xsz, ysz);
 	}
 
 	@EventHandler
 	public void onSelect(SelectEvent e) throws Exception {
 		// TODO Auto-generated method stub
-		
+		Global.log(Global.levels.DEBUG,"I got selected!!!");
 	}
 	
 	@EventHandler
 	public void onMousedown(Event e) throws Exception {
 		// TODO Auto-generated method stub
+		Global.log(Global.levels.DEBUG, "md:" + e.getType().getVal());
 		
 	}
 	
 	@EventHandler
 	public void onMouseup(Event e) throws Exception {
 		// TODO Auto-generated method stub
-		
+		Global.log(Global.levels.DEBUG, "mu:" + e.getType().getVal());
 	}
 
 	@EventHandler
 	public void onKeyup(Event e) throws Exception {
 		// TODO Auto-generated method stub
-		
+		Global.log(Global.levels.DEBUG, "ku:" + e.getType().getVal());
 	}
 
 	@EventHandler
 	public void onKeydown(Event e) throws Exception {
 		// TODO Auto-generated method stub
-		
+		Global.log(Global.levels.DEBUG, "kd:" + e.getType().getVal());
 	}
 	
 	@EventHandler
@@ -88,6 +91,20 @@ public class Button implements MenuElement {
 	public MenuElement setFont(Font f) {
 		// TODO Auto-generated method stub
 		this.f = f;
+		return this;
+	}
+
+	@Override
+	public void onDeselect(DeselectEvent e) throws Exception {
+		// TODO Auto-generated method stub
+		Global.log(Global.levels.DEBUG,"I got deselected... :(");
+	}
+
+	@Override
+	public MenuElement setDrawPosOff(int x, int y) {
+		// TODO Auto-generated method stub
+		offx=x;
+		offy=y;
 		return this;
 	}
 
