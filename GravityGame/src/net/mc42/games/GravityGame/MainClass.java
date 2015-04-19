@@ -22,7 +22,7 @@ public class MainClass extends BasicGame
 		super(gamename);
 	}
 	
-	int exit=0;private void checkForceExit(GameContainer gc){int is=0,tmp=exit<<8;boolean down=true;while((tmp=(tmp>>8))!=0){is=(tmp&0xFF);down = down && gc.getInput().isKeyDown(is);}if(down){exit();}}private void setExitKeys(int... keys){int i=0,out=0;for(int key:keys){out|=key<<(i++*8);}exit=out;}
+	long exit=0;private void checkForceExit(GameContainer gc){long is=0,tmp=exit<<8;boolean down=true;while((tmp=(tmp>>8))!=0){is=(tmp&0xFF);down=down&&gc.getInput().isKeyDown((int)is);}if(down){exit();}}private void setExitKeys(int... keys){int i=0,out=0;for(int key:keys){out|=key<<(i++*8);}exit=out;}
 	
 	private void exit(){
 		Global.log(Global.levels.INFO, "Closing program... But why?");
@@ -35,7 +35,7 @@ public class MainClass extends BasicGame
 			MainClass.globalShare = gc;
 			Fonts.addFont("basefont");
 			GUIs.init(gc);
-			setExitKeys(Keyboard.KEY_Q,Keyboard.KEY_LCONTROL);
+			setExitKeys(Keyboard.KEY_LCONTROL,Keyboard.KEY_Q);
 			new GUI( "testgui", new Menu("Test Menu")
 				.setFont( gc.getGraphics().getFont() )
 				.setFontColor(Color.green)

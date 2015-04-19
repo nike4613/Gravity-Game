@@ -50,13 +50,14 @@ public class Menu implements Widget {
 		g.setColor(color);
 		
 		namePos = (szx/2)-(g.getFont().getWidth(name)/2)+x;
-		int ny = g.getFont().getHeight("AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz");
+		int ny = g.getFont().getHeight("AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz")+5;
 		g.drawString(name, namePos, y);
-		for(MenuElement el:elems){
-			el.setDrawPosOff(x, y);
-			el.setPos((szx/2)-(el.getSize().first/2), ny+5);
-			el.draw(g);
-			ny += 5+el.getSize().last;
+		for(int i=0;i<elems.size();i++){
+			//MenuElement el = elems.get(i);
+			elems.get(i).setDrawPosOff(x, y);
+			elems.get(i).setPos((szx/2)-(elems.get(i).getSize().first/2), ny);
+			elems.get(i).draw(g);
+			ny += 5+elems.get(i).getSize().last;
 		}
 		
 		g.setFont(tempFont);
@@ -65,19 +66,20 @@ public class Menu implements Widget {
 	
 	public void processEvents(Event e){
 		try {
-		if(e.getType().equals(EventType.MOUSEMOVE)){
+		if(e.getType().equals(EventType.MOUSEMOVE)||e.getType().equals(EventType.DRAG)){
 			int x = e.getPos().first;
 			int y = e.getPos().last;
 			int i=0;
 			int selEln = -1;
 			for(MenuElement m:elems){
+				//Global.log(Global.levels.DEBUG, m.getPos().toString() + "::" + m.getSize().toString() + "//" + e.getPos().toString());
 				if(m.getPos().first <= x && m.getPos().first+m.getSize().first >= x &&
 						m.getPos().last <= y && m.getPos().last+m.getSize().last >= y){
 					selEln = i;
 					
 					break;
 				} else selEln = -1;
-				//Global.log(Global.levels.DEBUG, i + "");
+				//Global.log(Global.levels.DEBUG, m.getPos().toString() + "::" + m.getSize().toString() + "//" + e.getPos().toString());
 				i++;
 			}
 			
@@ -104,6 +106,17 @@ public class Menu implements Widget {
 					);
 				
 			}
+			if(e.getType().equals(EventType.DRAG)){
+				if(selEl==-1)return;
+				Utils.getAnnotatedMethod(
+						EventHandler.class, 
+						elems.get(selEl).getClass(), 
+						"onDrag"
+					).invoke(
+						elems.get(selEl),
+						e
+					);
+			}
 		} else if(e.getType().equals(EventType.INIT)){
 			for(MenuElement m:elems)
 			Utils.getAnnotatedMethod(
@@ -125,7 +138,8 @@ public class Menu implements Widget {
 					e
 				);
 		}
-		} catch (Exception e1) {
+		} catch(NullPointerException n){
+		}catch (Exception e1) {
 				// TODO Auto-generated catch block
 			Global.log(Global.levels.DEBUG, e1);
 		}
@@ -133,6 +147,9 @@ public class Menu implements Widget {
 
 	@Override
 	public void update(GameContainer c, int timeinms) throws Exception {
+		//for(int i=0;i<elems.size();i++){
+			if(selEl!=-1)elems.get(selEl).update(c);
+		//}
 	}
 
 }

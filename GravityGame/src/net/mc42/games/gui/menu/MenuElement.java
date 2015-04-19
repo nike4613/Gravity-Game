@@ -5,6 +5,7 @@ import net.mc42.games.gui.EventHandler;
 import net.mc42.global.Pair;
 
 import org.newdawn.slick.Font;
+import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 
 public interface MenuElement {
@@ -13,6 +14,7 @@ public interface MenuElement {
 	public MenuElement setSize(int x, int y);
 	public MenuElement setPos(int x, int y);
 	public MenuElement setDrawPosOff(int x, int y);
+	public void update(GameContainer gc);
 	public Pair<Integer,Integer> getSize();
 	public Pair<Integer,Integer> getPos();
 	public MenuElement setFont(Font f);

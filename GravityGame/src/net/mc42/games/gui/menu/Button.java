@@ -5,7 +5,9 @@ import net.mc42.games.gui.EventHandler;
 import net.mc42.global.Global;
 import net.mc42.global.Pair;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.Font;
+import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 
 public class Button implements MenuElement {
@@ -15,33 +17,40 @@ public class Button implements MenuElement {
 	int y=0;
 	int offx=0;
 	int offy=0;
+	boolean selected = false;
+	int mouseDown = 0x0;
 	Font f;
 	
 	public void draw(Graphics g)
 			throws Exception {
 		// TODO Auto-generated method stub
+		Color c = g.getColor();
+		g.setColor(((mouseDown&0x1)==1)?Color.green:Color.yellow);
+		g.setColor((selected)?g.getColor():Color.red);
 		g.drawRect(x+offx, y+offy, xsz, ysz);
+		g.setColor(c);
+	}
+	
+	public void update(GameContainer gc){
+		for(int i=0;i<6;i++){
+			if(!gc.getInput().isMouseButtonDown(i))mouseDown &= ~(1<<i);
+			else mouseDown |= 1<<i;
+		}
+		//Global.log(Global.levels.DEBUG, "mouseDown=" + mouseDown);
 	}
 
 	@EventHandler
 	public void onSelect(SelectEvent e) throws Exception {
 		// TODO Auto-generated method stub
 		Global.log(Global.levels.DEBUG,"I got selected!!!");
-	}
-	
-	@EventHandler
-	public void onMousedown(Event e) throws Exception {
-		// TODO Auto-generated method stub
-		Global.log(Global.levels.DEBUG, "md:" + e.getType().getVal());
-		
-	}
-	
-	@EventHandler
-	public void onMouseup(Event e) throws Exception {
-		// TODO Auto-generated method stub
-		Global.log(Global.levels.DEBUG, "mu:" + e.getType().getVal());
+		selected = true;
 	}
 
+	@EventHandler
+	public void onMouseup(Event e){
+		if(e.getType().getVal()==0)Global.log(Global.levels.DEBUG,"Yae! I got clicked!");
+	}
+	
 	@EventHandler
 	public void onKeyup(Event e) throws Exception {
 		// TODO Auto-generated method stub
@@ -98,6 +107,7 @@ public class Button implements MenuElement {
 	public void onDeselect(DeselectEvent e) throws Exception {
 		// TODO Auto-generated method stub
 		Global.log(Global.levels.DEBUG,"I got deselected... :(");
+		selected = false;
 	}
 
 	@Override

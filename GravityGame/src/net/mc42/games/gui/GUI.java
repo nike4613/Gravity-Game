@@ -52,7 +52,6 @@ public class GUI {
 		
 		//process xml
 		if(el.getName()!="gui") throw new Exception("Sections XML file supposed to be format '<gui><sect></sect>...</gui>'");
-		sepspace = el.getIntAttribute("seperation");
 		props = (el.getBooleanAttribute("tiling"))?propsEdgeTiling:propsEdgeScaling;
 		tiling = el.getBooleanAttribute("tiling");
 		margin = el.getIntAttribute("margin");
@@ -81,7 +80,7 @@ public class GUI {
 	public void processEvents(Event e){
 		if(e.getType().equals(EventType.DRAG)||e.getType().equals(EventType.MOUSEMOVE)||
 				e.getType().equals(EventType.MOUSEDOWN)||e.getType().equals(EventType.MOUSEUP)){
-			e.setPos(new Pair<Integer,Integer>(e.getPos().first-getPos().first.first,e.getPos().last-getPos().first.last));
+			e.setPos(new Pair<Integer,Integer>(e.getPos().first-(getPos().first.first+ss[0][0].getWidth()+margin),e.getPos().last-(getPos().first.last+ss[0][0].getHeight()+margin)));
 		}
 		widget.processEvents(e);
 	}
