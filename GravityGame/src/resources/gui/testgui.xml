@@ -1,4 +1,4 @@
-<gui margin="3" tiling="false">
+<gui margin="3" tiling="false" image="/resources/gui/testgui.png">
 	<sect px="0" py="0" x="0" y="0" w="10" h="10"></sect>
 	<sect px="1" py="0" x="10" y="0" w="10" h="10"></sect>
 	<sect px="2" py="0" x="20" y="0" w="10" h="10"></sect>

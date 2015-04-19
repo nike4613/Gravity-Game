@@ -1,7 +1,5 @@
 package net.mc42.games.gui;
 
-import java.io.File;
-
 import net.mc42.games.ImageUtils;
 import net.mc42.games.events.Event;
 import net.mc42.games.events.EventType;
@@ -35,19 +33,18 @@ public class GUI {
 	
 	/***********************************************************************
 	 * Constructs a new GUI object from image and XML file using widget w. *
-	 * @param imgfile The image (can contain multiple guis)                *
 	 * @param sectfile XML file (can contain only one gui)                 *
 	 * @param w The widget to use                                          *
 	 * @throws Exception                                                   *
 	 ***********************************************************************/
 	public GUI(String name, Widget w) throws Exception{this(name,w,true);}
 	public GUI(String name, Widget w, boolean active) throws Exception{
-		String imgfile = (new File("/resources/gui/" + name + ".png").isFile())?"/resources/gui/" + name + ".png":"/resources/gui/guis.png";
+		String imgfile ;//= (new File("/resources/gui/" + name + ".png").isFile())?"/resources/gui/" + name + ".png":"/resources/gui/guis.png";
 		String sectfile = "/resources/gui/" + name + ".xml";
 		XMLParser xml = new XMLParser();
 		XMLElement el = xml.parse(name, getClass().getResourceAsStream(sectfile));
-		Image im = new Image(getClass().getResourceAsStream(imgfile),name,false);
-		im.setFilter(Image.FILTER_NEAREST);
+		//Image im = new Image(getClass().getResourceAsStream(imgfile),name,false);
+		//im.setFilter(Image.FILTER_NEAREST);
 		widget = w;
 		
 		//process xml
@@ -55,6 +52,10 @@ public class GUI {
 		props = (el.getBooleanAttribute("tiling"))?propsEdgeTiling:propsEdgeScaling;
 		tiling = el.getBooleanAttribute("tiling");
 		margin = el.getIntAttribute("margin");
+		imgfile = el.getAttribute("image");
+		//Global.log(Global.levels.DEBUG, imgfile);
+		Image im = new Image(getClass().getResourceAsStream(imgfile),name,false);
+		im.setFilter(Image.FILTER_NEAREST);
 		for(int i = 0;i<el.getChildren().size();i++){
 			XMLElement e = el.getChildren().get(i);
 			if(e.getName()=="sect"){
