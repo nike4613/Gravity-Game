@@ -1,11 +1,11 @@
 package net.mc42.games.gui.menu;
 
+import net.mc42.games.ImageUtils;
 import net.mc42.games.events.Event;
 import net.mc42.games.gui.EventHandler;
 import net.mc42.global.Global;
 import net.mc42.global.Pair;
 
-import org.newdawn.slick.Color;
 import org.newdawn.slick.Font;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -76,11 +76,37 @@ public class Button implements MenuElement {
 	public void draw(Graphics g)
 			throws Exception {
 		// TODO Auto-generated method stub
-		Color c = g.getColor();
-		g.setColor(((mouseDown&0x1)==1)?Color.green:Color.yellow);
-		g.setColor((selected)?g.getColor():Color.red);
-		g.drawRect(x+offx, y+offy, xsz, ysz);
-		g.setColor(c);
+		Font fonT = g.getFont();
+		g.setFont(f);
+		//g.setColor(((mouseDown&0x1)==1)?Color.green:Color.yellow);
+		//g.setColor((selected)?g.getColor():Color.red);
+		Image[] i= new Image[3];
+		i = ((mouseDown&0x1)==1)?im_click:im_sel;
+		i = (selected)?i:im_nonsel;
+		//g.drawRect(x+offx, y+offy, xsz, ysz);
+		
+		int x=this.x+offx,y=this.y+offy;
+		int nsx=xsz,nsy=ysz;
+		
+		int h=0;
+		h=((h=(g.getFont().getHeight(text)/i[0].getHeight()))>1)?h:1;
+		
+		i[0]=i[0].getScaledCopy(h);i[1]=i[1].getScaledCopy(h);i[2]=i[2].getScaledCopy(h);
+		
+		i[0].draw(x, y);
+		Pair<Integer,Integer> w=ImageUtils.tileImageToApproxSize(i[1], x+i[0].getWidth(), y, g.getFont().getWidth(text), 1);
+		i[2].draw(x+w.first+i[0].getWidth(), y);
+		int texh = (w.last/2)-(g.getFont().getHeight(text)/2);
+		int texw = (w.first/2)-(g.getFont().getWidth(text)/2);
+		g.drawString(text, x+i[0].getWidth()+texw, y+texh);
+		
+		nsx = i[2].getWidth()+w.first+i[0].getWidth();
+		nsy = (i[2].getHeight()+w.last+i[0].getHeight())/3;
+		
+		setSize(nsx, nsy);
+		//setPos();
+		
+		g.setFont(fonT);
 	}
 	
 	public void update(GameContainer gc){

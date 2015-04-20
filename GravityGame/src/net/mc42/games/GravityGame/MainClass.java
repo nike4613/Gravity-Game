@@ -39,8 +39,8 @@ public class MainClass extends BasicGame
 			new GUI( "testgui", new Menu("Test Menu")
 				.setFont( gc.getGraphics().getFont() )
 				.setFontColor(Color.green)
-				.addElement(new Button("button","Button").setSize(50,50)) 
-			).setPos(50, 180, 200, 150).reg(0);
+				.addElement(new Button("button","Button-For-Testing!!!").setSize(50,50)) 
+			).setPos(50, 180, 300, 250).reg(0);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			Global.log(Global.levels.SEVERE, "Could not initialize game!", e);
