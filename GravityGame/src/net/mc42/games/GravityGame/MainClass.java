@@ -30,9 +30,10 @@ public class MainClass extends BasicGame
 		super(gamename);
 	}
 	
-	long exit=0;private void checkForceExit(GameContainer gc){long is=0,tmp=exit<<8;boolean down=true;while((tmp=(tmp>>8))!=0){is=(tmp&0xFF);down=down&&gc.getInput().isKeyDown((int)is);}if(down){exit();}}private void setExitKeys(int... keys){int i=0,out=0;for(int key:keys){out|=key<<(i++*8);}exit=out;}
+	long exit=0;private void checkForceExit(GameContainer gc){long is=0,tmp=exit<<8;boolean down=true;while((tmp=(tmp>>8))!=0){is=(tmp&0xFF);down=down&&gc.getInput().isKeyDown((int)is);}if(down){System.exit(0);}}private void setExitKeys(int... keys){int i=0,out=0;for(int key:keys){out|=key<<(i++*8);}exit=out;Thread t=new Thread(){public void run(){deInit();}};t.setName("deinit");Runtime.getRuntime().addShutdownHook(t);}
 	
-	private void exit(){
+	private static void deInit(){
+		//Cleanup
 		Global.log(Global.levels.INFO, "Closing program... But why?");
 		globalShare.exit();
 	}
@@ -99,6 +100,7 @@ public class MainClass extends BasicGame
 
 	public static void main(String[] args)
 	{
+		Thread.currentThread().setName("main");
 		Global.setDebugMode(true);
 		System.setProperty("org.lwjgl.opengl.Window.undecorated","false");
 		Global.log(Global.levels.DEBUG, "Beggining program");
