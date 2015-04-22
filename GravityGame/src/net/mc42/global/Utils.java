@@ -25,14 +25,14 @@ public class Utils {
 	}
 	public static Method getAnnotatedMethod(Class<? extends Annotation> anno, Class<?> c){
 
-		Global.log(Global.levels.INFO, anno.getName());
+		//Global.log(Global.levels.INFO, anno.getName());
 		
 		for(Method m:c.getMethods()){
 			if(m.isAnnotationPresent(anno)){
 				return m;
 			}
 			//if(m.isAnnotationPresent(anno))Global.log(Global.levels.DEBUG, m.getName() + "=" + name + ": " + (m.getName().equals(name)));
-			Global.log(Global.levels.INFO, m.getName() + ": " + m.isAnnotationPresent(anno));
+			//Global.log(Global.levels.INFO, m.getName() + ": " + m.isAnnotationPresent(anno));
 		}
 		
 		return null;

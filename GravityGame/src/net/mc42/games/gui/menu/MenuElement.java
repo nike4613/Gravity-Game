@@ -14,7 +14,7 @@ public interface MenuElement {
 	public MenuElement setSize(int x, int y);
 	public MenuElement setPos(int x, int y);
 	public MenuElement setDrawPosOff(int x, int y);
-	public void update(GameContainer gc);
+	public void update(GameContainer gc, int ms);
 	public Pair<Integer,Integer> getSize();
 	public Pair<Integer,Integer> getPos();
 	public MenuElement setFont(Font f);
@@ -24,6 +24,7 @@ public interface MenuElement {
 	public void onSelect(SelectEvent e) throws Exception;
 	@EventHandler
 	public void onDeselect(DeselectEvent e) throws Exception;
+	public boolean isSelected();
 	/*
 	public void onKeyPress(Event e) throws Exception;
 	public void onKeyDown(Event e) throws Exception;

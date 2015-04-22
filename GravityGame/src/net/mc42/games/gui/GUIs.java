@@ -61,6 +61,7 @@ public class GUIs {
 						break;
 					} else {
 						selUI = "";
+						getGUI(name).processEvents(new Event(gc, EventType.MOUSEMOVE, 0, 0));
 					}
 				} else {
 					selUI = "";

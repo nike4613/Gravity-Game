@@ -1,5 +1,7 @@
 package net.mc42.games.gui.menu;
 
+import java.lang.reflect.Method;
+
 import net.mc42.games.ImageUtils;
 import net.mc42.games.events.Event;
 import net.mc42.games.gui.EventHandler;
@@ -14,21 +16,36 @@ import org.newdawn.slick.util.xml.XMLElement;
 import org.newdawn.slick.util.xml.XMLParser;
 
 public class Button implements MenuElement {
-	int xsz=0;
-	int ysz=0;
-	int x=0;
-	int y=0;
-	int offx=0;
-	int offy=0;
-	boolean selected = false;
-	int mouseDown = 0x0;
-	String text;
-	Image[] im_nonsel = new Image[3];
-	Image[] im_sel = new Image[3];
-	Image[] im_click = new Image[3];
-	Font f;
+	private int xsz=0;
+	private int ysz=0;
+	private int x=0;
+	private int y=0;
+	private int offx=0;
+	private int offy=0;
+	private boolean selected = false;
+	private int mouseDown = 0x0;
+	private String text;
+	private Image[] im_nonsel = new Image[3];
+	private Image[] im_sel = new Image[3];
+	private Image[] im_click = new Image[3];
+	private Font f;
+	private Method clickAct = null;
+	private int clickMode ;//= 0b00001100;
+	private int clickLen ;//= 500;//ms
+	private long f1_ct = 0;
+	public static final int MODE_MOUSE_DOWN 	= 0b000000001;
+	public static final int MODE_MOUSE_UP 		= 0b000000010;
+	public static final int MODE_MOUSE_CLICK 	= 0b000000100;
+	public static final int MODE_MOUSE_1 		= 0b000001000;
+	public static final int MODE_MOUSE_2 		= 0b000010000;
+	public static final int MODE_MOUSE_3 		= 0b000100000;
+	public static final int MODE_MOUSE_4 		= 0b001000000;
+	public static final int MODE_MOUSE_5 		= 0b010000000;
 	
 	public Button(String name, String text) throws Exception{
+		setClickModes(MODE_MOUSE_CLICK,MODE_MOUSE_1,MODE_MOUSE_2,MODE_MOUSE_3,MODE_MOUSE_4,MODE_MOUSE_5);
+		setClickLength(500);
+		//Global.log(Global.levels.DEBUG, "" + String.format("%8s", Integer.toBinaryString(clickMode)).replace(' ', '0') + " - " + getModeSet(MODE_MOUSE_DOWN));
 		String imgfile ;//= (new File("/resources/gui/" + name + ".png").isFile())?"/resources/gui/" + name + ".png":"/resources/gui/guis.png";
 		String sectfile = "/resources/gui/" + name + ".xml";
 		XMLParser xml = new XMLParser();
@@ -70,8 +87,57 @@ public class Button implements MenuElement {
 		}
 		this.text = text;
 	}
+
+	private boolean getModeSet(int mode){
+		return ((clickMode&mode)==mode)?true:false;
+	}
 	
-	public Button(){}
+	private boolean getMouseDown(){
+		for(int i=0;i<5;i++){
+			if(getMouseButtonDown(i))
+				return true;
+		}
+		return false;
+	}
+	
+	private boolean getMouseButtonDown(int mouse){
+		return ((mouseDown&(1<<(mouse+1)))==(1<<(mouse+1)))?true:false;
+	}
+	
+	//public Button(){}
+	
+	public Button setClickAction(Method m){
+		clickAct = m;
+		return this;
+	}
+	
+	public Button setClickModes(int... modes){
+		return setClickModes(true,modes);
+	}
+	
+	public Button unsetClickMode(int mode){
+		clickMode &= ~mode;
+		return this;
+	}
+	
+	public Button setClickMode(int mode){
+		clickMode |= mode;
+		return this;
+	}
+	
+	public Button setClickModes(boolean override,int... modes){
+		int total = (override)?0:clickMode;
+		for(int m:modes){
+			total |= m;
+		}
+		clickMode = total;
+		return this;
+	}
+	
+	public Button setClickLength(int len){
+		clickLen = len;
+		return this;
+	}
 	
 	public void draw(Graphics g)
 			throws Exception {
@@ -81,7 +147,7 @@ public class Button implements MenuElement {
 		//g.setColor(((mouseDown&0x1)==1)?Color.green:Color.yellow);
 		//g.setColor((selected)?g.getColor():Color.red);
 		Image[] i= new Image[3];
-		i = ((mouseDown&0x1)==1)?im_click:im_sel;
+		i = ((mouseDown)!=0)?im_click:im_sel;
 		i = (selected)?i:im_nonsel;
 		//g.drawRect(x+offx, y+offy, xsz, ysz);
 		
@@ -109,24 +175,56 @@ public class Button implements MenuElement {
 		g.setFont(fonT);
 	}
 	
-	public void update(GameContainer gc){
-		for(int i=0;i<6;i++){
-			if(!gc.getInput().isMouseButtonDown(i))mouseDown &= ~(1<<i);
-			else mouseDown |= 1<<i;
+	public void update(GameContainer gc, int ms){
+		/*for(int i=0;i<6;i++){
+			if(!gc.getInput().isMouseButtonDown(i))mouseDown &= ~(1<<(i+1));
+			else mouseDown |= 1<<(i+1);
+		}*/
+		
+		if(f1_ct>0){
+		/*if(getModeSet(MODE_MOUSE_1)&&getMouseButtonDown(1))f1_ct+=ms;
+		else if(getModeSet(MODE_MOUSE_2)&&getMouseButtonDown(2))f1_ct+=ms;
+		else if(getModeSet(MODE_MOUSE_3)&&getMouseButtonDown(3))f1_ct+=ms;
+		else if(getModeSet(MODE_MOUSE_4)&&getMouseButtonDown(4))f1_ct+=ms;
+		else if(getModeSet(MODE_MOUSE_5)&&getMouseButtonDown(5))f1_ct+=ms;
+		else f1_ct=0;*/
+			//Global.log(Global.levels.DEBUG, ""+f1_ct+" " + getMouseDown());
+			if(getMouseDown())f1_ct+=ms;
 		}
+		
+		try{
+		/*if(getModeSet(MODE_MOUSE_1)&&!getMouseButtonDown(1)&&f1_ct<=clickLen&&f1_ct!=0&&getModeSet(MODE_MOUSE_CLICK)){if(clickAct!=null)clickAct.invoke(null);f1_ct=0;}
+		else if(getModeSet(MODE_MOUSE_2)&&!getMouseButtonDown(2)&&f1_ct<=clickLen&&f1_ct!=0&&getModeSet(MODE_MOUSE_CLICK)){if(clickAct!=null)clickAct.invoke(null);f1_ct=0;}
+		else if(getModeSet(MODE_MOUSE_3)&&!getMouseButtonDown(3)&&f1_ct<=clickLen&&f1_ct!=0&&getModeSet(MODE_MOUSE_CLICK)){if(clickAct!=null)clickAct.invoke(null);f1_ct=0;}
+		else if(getModeSet(MODE_MOUSE_4)&&!getMouseButtonDown(4)&&f1_ct<=clickLen&&f1_ct!=0&&getModeSet(MODE_MOUSE_CLICK)){if(clickAct!=null)clickAct.invoke(null);f1_ct=0;}
+		else if(getModeSet(MODE_MOUSE_5)&&!getMouseButtonDown(5)&&f1_ct<=clickLen&&f1_ct!=0&&getModeSet(MODE_MOUSE_CLICK)){if(clickAct!=null)clickAct.invoke(null);f1_ct=0;}*/
+		if(!getMouseDown()&&f1_ct<=clickLen&&f1_ct!=0&&getModeSet(MODE_MOUSE_CLICK)){if(clickAct!=null)clickAct.invoke(null);f1_ct=0;}
+		}catch(Exception e){Global.log(Global.levels.WARNING, "Exeption while trying to execute click function", e);}
 		//Global.log(Global.levels.DEBUG, "mouseDown=" + mouseDown);
+		//Global.log(Global.levels.DEBUG, "\""+this.text+"\" count=" + f1_ct);
+		if(f1_ct>clickLen)f1_ct=0;
 	}
 
 	@EventHandler
 	public void onSelect(SelectEvent e) throws Exception {
 		// TODO Auto-generated method stub
-		Global.log(Global.levels.DEBUG,"I got selected!!!");
+		//Global.log(Global.levels.DEBUG,"I got selected!!!");
 		selected = true;
 	}
 
 	@EventHandler
 	public void onMouseup(Event e){
-		if(e.getType().getVal()==0)Global.log(Global.levels.DEBUG,"Yae! I got clicked!");
+		//if(e.getType().getVal()==0)Global.log(Global.levels.DEBUG,"Yae! I got clicked!");
+		mouseDown &= ~(1<<(e.getType().getVal()+1));
+		try{if(getModeSet(MODE_MOUSE_UP)&&clickAct!=null)clickAct.invoke(null);}catch(Exception ea){Global.log(Global.levels.WARNING, "Exeption while trying to execute click function", ea);}
+	}
+	
+	@EventHandler
+	public void onMousedown(Event e){
+		//if(e.getType().getVal()==0)Global.log(Global.levels.DEBUG,"Yae! I got clicked!");
+		mouseDown |= 1<<(e.getType().getVal()+1);
+		if(f1_ct==0&&getModeSet(MODE_MOUSE_CLICK))f1_ct=1;
+		try{if(getModeSet(MODE_MOUSE_DOWN)&&clickAct!=null)clickAct.invoke(null);}catch(Exception ea){Global.log(Global.levels.WARNING, "Exeption while trying to execute click function", ea);}
 	}
 	
 	@EventHandler
@@ -184,8 +282,12 @@ public class Button implements MenuElement {
 	@EventHandler
 	public void onDeselect(DeselectEvent e) throws Exception {
 		// TODO Auto-generated method stub
-		Global.log(Global.levels.DEBUG,"I got deselected... :(");
+		//Global.log(Global.levels.DEBUG,"I got deselected... :(");
 		selected = false;
+	}
+	
+	public boolean isSelected(){
+		return selected;
 	}
 
 	@Override

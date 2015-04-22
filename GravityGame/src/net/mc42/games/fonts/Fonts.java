@@ -5,6 +5,7 @@ import java.util.Map;
 
 import net.mc42.global.Global;
 
+import org.newdawn.slick.AngelCodeFont;
 import org.newdawn.slick.Font;
 import org.newdawn.slick.Graphics;
 
@@ -20,8 +21,11 @@ public class Fonts {
 		}
 	}
 	
+	public static void addFont(String name, String img) throws Exception{
+		fonts.put(name, new AngelCodeFont("/resources/font/"+name+".fnt", img));
+	}
 	public static void addFont(String name) throws Exception{
-		fonts.put(name, new CustomFont(name));
+		addFont(name, "/resources/font/"+name+".png");
 	}
 	
 	public static void addFont(Font font, String name) throws Exception{

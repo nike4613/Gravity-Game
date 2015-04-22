@@ -79,6 +79,15 @@ public class Menu implements Widget {
 					
 					break;
 				} else selEln = -1;
+				if((elems.get(i).isSelected())&&(x<0&&y<0))
+					Utils.getAnnotatedMethod(
+						EventHandler.class, 
+						elems.get(i).getClass(), 
+						"onDeselect"
+					).invoke(
+						elems.get(i),
+						new DeselectEvent(e.getGameContainer(), x, y)
+					);
 				//Global.log(Global.levels.DEBUG, m.getPos().toString() + "::" + m.getSize().toString() + "//" + e.getPos().toString());
 				i++;
 			}
@@ -148,7 +157,7 @@ public class Menu implements Widget {
 	@Override
 	public void update(GameContainer c, int timeinms) throws Exception {
 		//for(int i=0;i<elems.size();i++){
-			if(selEl!=-1)elems.get(selEl).update(c);
+			if(selEl!=-1)elems.get(selEl).update(c,timeinms);
 		//}
 	}
 

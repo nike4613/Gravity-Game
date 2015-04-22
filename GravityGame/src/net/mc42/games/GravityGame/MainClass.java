@@ -29,6 +29,15 @@ public class MainClass extends BasicGame
 		globalShare.exit();
 	}
 
+	@EventHandler
+	public static void button1(){
+		Global.log(Global.levels.DEBUG, "button1");
+	}
+	@EventHandler
+	public static void button2(){
+		Global.log(Global.levels.DEBUG, "button2");
+	}
+	
 	@Override
 	public void init(GameContainer gc) {
 		try {
@@ -39,7 +48,14 @@ public class MainClass extends BasicGame
 			new GUI( "testgui", new Menu("Test Menu")
 				.setFont( gc.getGraphics().getFont() )
 				.setFontColor(Color.green)
-				.addElement(new Button("button","Button-For-Testing!!!").setSize(50,50)) 
+				.addElement(
+					new Button("button","Button-For-Testing!!!")
+					.setClickAction(Utils.getAnnotatedMethod(EventHandler.class, this.getClass(), "button1"))
+				) 
+				.addElement(
+					new Button("button","Button 2!!!")
+					.setClickAction(Utils.getAnnotatedMethod(EventHandler.class, this.getClass(), "button2"))
+				)
 			).setPos(50, 180, 300, 250).reg(0);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
