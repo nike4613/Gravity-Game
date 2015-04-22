@@ -1,14 +1,22 @@
 package net.mc42.games.GravityGame;
-import net.mc42.games.fonts.*;
-import net.mc42.games.gui.*;
+import net.mc42.games.gui.EventHandler;
+import net.mc42.games.gui.GUI;
+import net.mc42.games.gui.GUIs;
 import net.mc42.games.gui.menu.Button;
 import net.mc42.games.gui.menu.Menu;
-import net.mc42.global.*;
+import net.mc42.global.BaseClass;
+import net.mc42.global.Global;
+import net.mc42.global.Utils;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
-import org.newdawn.slick.*;
+import org.newdawn.slick.AppGameContainer;
+import org.newdawn.slick.BasicGame;
+import org.newdawn.slick.Color;
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.SlickException;
 
 @BaseClass
 public class MainClass extends BasicGame
@@ -42,7 +50,7 @@ public class MainClass extends BasicGame
 	public void init(GameContainer gc) {
 		try {
 			MainClass.globalShare = gc;
-			Fonts.addFont("basefont");
+			//Fonts.addFont("basefont");
 			GUIs.init(gc);
 			setExitKeys(Keyboard.KEY_LCONTROL,Keyboard.KEY_Q);
 			new GUI( "testgui", new Menu("Test Menu")
@@ -59,7 +67,7 @@ public class MainClass extends BasicGame
 			).setPos(50, 180, 300, 250).reg(0);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			Global.log(Global.levels.SEVERE, "Could not initialize game!", e);
+			Global.log(Global.levels.FATAL, "Could not initialize game!", e);
 			System.exit(1);
 		}
 	}
@@ -79,9 +87,9 @@ public class MainClass extends BasicGame
 	{try {
 		g.setColor(Color.white);
 		g.drawString("Howdy!", 100, 100);
-		g.setFont(Fonts.getFont("basefont"));
-		g.setColor(Color.red);
-		g.drawString("AHAhahaHAHahAaH!\naHAHahahHAhahAHAha!", 100, 120);
+		//g.setFont(Fonts.getFont("basefont"));
+		//g.setColor(Color.red);
+		//g.drawString("AHAhahaHAHahAaH!\naHAHahahHAhahAHAha!", 100, 120);
 		
 		GUIs.drawGUIs(g);
 	} catch (Exception e) {
@@ -123,7 +131,7 @@ public class MainClass extends BasicGame
 		}
 		catch (Exception ex)
 		{
-			Global.log(Global.levels.SEVERE, "Could not start game!", ex);
+			Global.log(Global.levels.FATAL, "Could not start game!", ex);
 		}
 	}
 }
