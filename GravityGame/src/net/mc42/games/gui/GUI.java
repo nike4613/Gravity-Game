@@ -37,8 +37,8 @@ public class GUI {
 	 * @param w The widget to use                                          *
 	 * @throws Exception                                                   *
 	 ***********************************************************************/
-	public GUI(String name, String file, Widget w) throws Exception{this(name, file,w,true);}
-	public GUI(String name, String file, Widget w, boolean active) throws Exception{
+	public GUI(String name, String file, Widget w, int renderOrder) throws Exception{this(name, file,w,renderOrder,true);}
+	public GUI(String name, String file, Widget w, int renderOrder, boolean active) throws Exception{
 		String imgfile ;//= (new File("/resources/gui/" + name + ".png").isFile())?"/resources/gui/" + name + ".png":"/resources/gui/guis.png";
 		String sectfile = "/resources/gui/" + file + ".xml";
 		XMLParser xml = new XMLParser();
@@ -68,15 +68,12 @@ public class GUI {
 			}*/
 		}
 		this.name = name;
-		//GUIs.regGUI(this, name, true);
+		
+		GUIs.regGUI(this, name, active, renderOrder);
 	}
 	
 	public String getName(){
 		return name;
-	}
-	
-	public void reg(int order){
-		GUIs.regGUI(this, name, true, order);
 	}
 	
 	public void update(GameContainer container, int timeinms) throws Exception{

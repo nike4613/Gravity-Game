@@ -1,20 +1,20 @@
-package net.mc42.games.GravityGame;
+package net.mc42.games;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.util.Properties;
+
 import net.mc42.games.gui.EventHandler;
 import net.mc42.games.gui.GUI;
 import net.mc42.games.gui.GUIs;
-import net.mc42.games.gui.menu.Button;
-import net.mc42.games.gui.menu.Menu;
 import net.mc42.games.gui.menu.MenuElement;
 import net.mc42.global.BaseClass;
 import net.mc42.global.Global;
-import net.mc42.global.Utils;
 
-import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.BasicGame;
-import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
@@ -23,7 +23,9 @@ import org.newdawn.slick.SlickException;
 public class MainClass extends BasicGame
 {	
 	
-	public static GameContainer globalShare;
+	private static GameContainer globalShare;
+	public static Properties props;
+	private static GameMain mainObj;
 	
 	
 	public MainClass(String gamename)
@@ -31,32 +33,13 @@ public class MainClass extends BasicGame
 		super(gamename);
 	}
 	
-	long exit=0;private void checkForceExit(GameContainer gc){long is=0,tmp=exit<<8;boolean down=true;while((tmp=(tmp>>8))!=0){is=(tmp&0xFF);down=down&&gc.getInput().isKeyDown((int)is);}if(down){System.exit(0);}}private void setExitKeys(int... keys){int i=0,out=0;for(int key:keys){out|=key<<(i++*8);}exit=out;Thread t=new Thread(){public void run(){deInit();}};t.setName("deinit");Runtime.getRuntime().addShutdownHook(t);}
+	long exit=0;private void checkForceExit(GameContainer gc){long is=0,tmp=exit<<8;boolean down=true;while((tmp=(tmp>>8))!=0){is=(tmp&0xFF);down=down&&gc.getInput().isKeyDown((int)is);}if(down){System.exit(0);}}protected void setExitKeys(int... keys){int i=0,out=0;for(int key:keys){out|=key<<(i++*8);}exit=out;Thread t=new Thread(){public void run(){deInit();}};t.setName("deinit");Runtime.getRuntime().addShutdownHook(t);}
 	
 	private static void deInit(){
 		//Cleanup
 		Global.log(Global.levels.INFO, "Closing program... But why?");
+		try {mainObj.deInit();} catch (Exception e) {}
 		globalShare.exit();
-	}
-
-	@EventHandler
-	public static void button1(GUI g,MenuElement m){
-		Global.log(Global.levels.DEBUG, "button1");
-	}
-	@EventHandler
-	public static void button2(GUI g,MenuElement m){
-		Global.log(Global.levels.DEBUG, "button2");
-	}
-	@EventHandler
-	public static void exitbutton(GUI g,MenuElement m) throws Exception{
-		Global.log(Global.levels.DEBUG,"Closing GUI " + g.getName());
-		GUIs.setActive(g.getName(), false);
-		Thread.sleep(1000);
-		GUIs.setActive("closeui", true);
-	}
-	@EventHandler
-	public static void closeGame(GUI g,MenuElement m){
-		System.exit(0);
 	}
 	
 	@Override
@@ -65,8 +48,10 @@ public class MainClass extends BasicGame
 			MainClass.globalShare = gc;
 			//Fonts.addFont("basefont");
 			GUIs.init(gc);
-			setExitKeys(Keyboard.KEY_LCONTROL,Keyboard.KEY_Q);
-			new GUI( "mainui", "testgui", new Menu("Test Menu")
+			
+			mainObj.initI(gc, this);
+			//setExitKeys(Keyboard.KEY_LCONTROL,Keyboard.KEY_Q);
+			/*new GUI( "mainui", "testgui", new Menu("Test Menu")
 				.setFont( gc.getGraphics().getFont() )
 				.setFontColor(Color.green)
 				.addElement(
@@ -81,15 +66,15 @@ public class MainClass extends BasicGame
 					new Button("button","Close UI")
 					.setClickAction(Utils.getAnnotatedMethod(EventHandler.class, this.getClass(), "exitbutton"))
 				)
-			).setPos(50, 180, 300, 250).reg(0);
-			/*new GUI( "closeui", "testgui", new Menu("Close")
+			,0).setPos(50, 180, 300, 250);
+			new GUI( "closeui", "testgui", new Menu("Close")
 				.setFont( gc.getGraphics().getFont() )
 				.setFontColor(Color.red)
 				.addElement(
 						new Button("button","Close Game")
 						.setClickAction(Utils.getAnnotatedMethod(EventHandler.class, this.getClass(), "closeGame"))
 						)
-			,false).setPos(50, 180, 300, 250).reg(0);*/
+			,0,false).setPos(50, 180, 300, 250);*/
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			Global.log(Global.levels.FATAL, "Could not initialize game!", e);
@@ -101,6 +86,7 @@ public class MainClass extends BasicGame
 	public void update(GameContainer gc, int i) throws SlickException 
 	{try {
 		GUIs.updateGUIs(gc, i);
+		mainObj.update(gc, i);
 		checkForceExit(gc);
 	} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -110,13 +96,16 @@ public class MainClass extends BasicGame
 	@Override
 	public void render(GameContainer gc, Graphics g)throws SlickException
 	{try {
-		g.setColor(Color.white);
-		g.drawString("Howdy!", 100, 100);
+		//g.setColor(Color.white);
+		//g.drawString("Howdy!", 100, 100);
 		//g.setFont(Fonts.getFont("basefont"));
 		//g.setColor(Color.red);
 		//g.drawString("AHAhahaHAHahAaH!\naHAHahahHAhahAHAha!", 100, 120);
 		
 		GUIs.drawGUIs(g);
+		
+		mainObj.render(gc, g);
+		
 	} catch (Exception e) {
 			// TODO Auto-generated catch block
 		Global.log(Global.levels.SEVERE, "Error in Game.render()", e);
@@ -124,16 +113,40 @@ public class MainClass extends BasicGame
 
 	public static void main(String[] args)
 	{
+		Properties defs = new Properties();
+		defs.setProperty("mainClass", "net.mc42.games.MainClass");
+		defs.setProperty("debugMode", "false");
+		defs.setProperty("unDecorated", "false");
+		defs.setProperty("fullscreen", "true");
+		defs.setProperty("fps", "60");
+		try {
+			
+			defs.load(ClassLoader.getSystemResourceAsStream("resources/properties.ini"));
+			props = defs;
+			File propf = new File(System.getProperty("user.dir")+"/configs/properties.ini");
+			if(!propf.exists()){
+				new File(System.getProperty("user.dir")+"/configs").mkdirs();
+				propf.createNewFile();
+			}
+			props.load(new FileInputStream(propf));
+			props.store(new FileOutputStream(propf), "Properties");
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			Global.log(Global.levels.WARNING, "Failed to load properties... using defaults", e1);
+			props = defs;
+		}
 		Thread.currentThread().setName("main");
-		Global.setDebugMode(true);
-		System.setProperty("org.lwjgl.opengl.Window.undecorated","false");
+		Global.setDebugMode(props.getProperty("debugMode").contains("true"));
+		System.setProperty("org.lwjgl.opengl.Window.undecorated",props.getProperty("unDecorated"));
 		Global.log(Global.levels.DEBUG, "Beggining program");
+		
 		
 		
 		//System.exit(0);;
 		try
 		{
 			DisplayMode best = new DisplayMode(0, 0);
+			DisplayMode[] dss = Display.getAvailableDisplayModes();
 			for(DisplayMode ds:Display.getAvailableDisplayModes()){
 				if(ds.getFrequency()>=60&&ds.isFullscreenCapable()&&ds.getBitsPerPixel()>=24){
 					if(ds.getHeight()>best.getHeight()&&ds.getWidth()>best.getWidth()) best = ds;
@@ -143,7 +156,7 @@ public class MainClass extends BasicGame
 			
 			AppGameContainer appgc = new AppGameContainer(new MainClass("Simple Slick Game"));
 			appgc.setDisplayMode(/*best.getWidth()*/640, /*best.getHeight()*/480, false);
-			appgc.setTargetFrameRate(/*best.getFrequency()*/60);
+			appgc.setTargetFrameRate(/*best.getFrequency()*60*/Integer.parseInt(props.getProperty("fps")));
 			appgc.setShowFPS(false);
 			try {
 				//appgc.setIcon("resources/icon/gameIcon.png");
@@ -153,6 +166,14 @@ public class MainClass extends BasicGame
 				// TODO Auto-generated catch block
 				Global.log(Global.levels.WARNING, "Error occured while setting icons... Continuing", e);
 			}
+			try{
+				Class<?> main = ClassLoader.getSystemClassLoader().loadClass(props.getProperty("mainClass"));
+				if (!(main.getSuperclass()==GameMain.class)) throw new Exception("Couldn't load class");
+				mainObj = (GameMain) main.newInstance();
+			} catch (Exception e) {
+				Global.log(Global.levels.FATAL, "Could not locate execution class", e);
+			}
+			
 			appgc.start();
 		}
 		catch (Exception ex)
