@@ -37,12 +37,13 @@ public class GUI {
 	 * @param w The widget to use                                          *
 	 * @throws Exception                                                   *
 	 ***********************************************************************/
-	public GUI(String name, Widget w) throws Exception{this(name,w,true);}
-	public GUI(String name, Widget w, boolean active) throws Exception{
+	public GUI(String name, String file, Widget w) throws Exception{this(name, file,w,true);}
+	public GUI(String name, String file, Widget w, boolean active) throws Exception{
 		String imgfile ;//= (new File("/resources/gui/" + name + ".png").isFile())?"/resources/gui/" + name + ".png":"/resources/gui/guis.png";
-		String sectfile = "/resources/gui/" + name + ".xml";
+		String sectfile = "/resources/gui/" + file + ".xml";
 		XMLParser xml = new XMLParser();
-		XMLElement el = xml.parse(name, getClass().getResourceAsStream(sectfile));
+		XMLElement el = xml.parse(file, getClass().getResourceAsStream(sectfile));
+		w.setGUI(this);
 		//Image im = new Image(getClass().getResourceAsStream(imgfile),name,false);
 		//im.setFilter(Image.FILTER_NEAREST);
 		widget = w;
@@ -54,7 +55,7 @@ public class GUI {
 		margin = el.getIntAttribute("margin");
 		imgfile = el.getAttribute("image");
 		//Global.log(Global.levels.DEBUG, imgfile);
-		Image im = new Image(getClass().getResourceAsStream(imgfile),name,false);
+		Image im = new Image(getClass().getResourceAsStream(imgfile),file,false);
 		im.setFilter(Image.FILTER_NEAREST);
 		for(int i = 0;i<el.getChildren().size();i++){
 			XMLElement e = el.getChildren().get(i);
@@ -68,6 +69,10 @@ public class GUI {
 		}
 		this.name = name;
 		//GUIs.regGUI(this, name, true);
+	}
+	
+	public String getName(){
+		return name;
 	}
 	
 	public void reg(int order){

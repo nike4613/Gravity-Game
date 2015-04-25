@@ -4,6 +4,7 @@ import net.mc42.games.gui.GUI;
 import net.mc42.games.gui.GUIs;
 import net.mc42.games.gui.menu.Button;
 import net.mc42.games.gui.menu.Menu;
+import net.mc42.games.gui.menu.MenuElement;
 import net.mc42.global.BaseClass;
 import net.mc42.global.Global;
 import net.mc42.global.Utils;
@@ -39,12 +40,23 @@ public class MainClass extends BasicGame
 	}
 
 	@EventHandler
-	public static void button1(){
+	public static void button1(GUI g,MenuElement m){
 		Global.log(Global.levels.DEBUG, "button1");
 	}
 	@EventHandler
-	public static void button2(){
+	public static void button2(GUI g,MenuElement m){
 		Global.log(Global.levels.DEBUG, "button2");
+	}
+	@EventHandler
+	public static void exitbutton(GUI g,MenuElement m) throws Exception{
+		Global.log(Global.levels.DEBUG,"Closing GUI " + g.getName());
+		GUIs.setActive(g.getName(), false);
+		Thread.sleep(1000);
+		GUIs.setActive("closeui", true);
+	}
+	@EventHandler
+	public static void closeGame(GUI g,MenuElement m){
+		System.exit(0);
 	}
 	
 	@Override
@@ -54,7 +66,7 @@ public class MainClass extends BasicGame
 			//Fonts.addFont("basefont");
 			GUIs.init(gc);
 			setExitKeys(Keyboard.KEY_LCONTROL,Keyboard.KEY_Q);
-			new GUI( "testgui", new Menu("Test Menu")
+			new GUI( "mainui", "testgui", new Menu("Test Menu")
 				.setFont( gc.getGraphics().getFont() )
 				.setFontColor(Color.green)
 				.addElement(
@@ -65,7 +77,19 @@ public class MainClass extends BasicGame
 					new Button("button","Button 2!!!")
 					.setClickAction(Utils.getAnnotatedMethod(EventHandler.class, this.getClass(), "button2"))
 				)
+				.addElement(
+					new Button("button","Close UI")
+					.setClickAction(Utils.getAnnotatedMethod(EventHandler.class, this.getClass(), "exitbutton"))
+				)
 			).setPos(50, 180, 300, 250).reg(0);
+			/*new GUI( "closeui", "testgui", new Menu("Close")
+				.setFont( gc.getGraphics().getFont() )
+				.setFontColor(Color.red)
+				.addElement(
+						new Button("button","Close Game")
+						.setClickAction(Utils.getAnnotatedMethod(EventHandler.class, this.getClass(), "closeGame"))
+						)
+			,false).setPos(50, 180, 300, 250).reg(0);*/
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			Global.log(Global.levels.FATAL, "Could not initialize game!", e);

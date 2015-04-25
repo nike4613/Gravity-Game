@@ -25,6 +25,7 @@ public interface MenuElement {
 	@EventHandler
 	public void onDeselect(DeselectEvent e) throws Exception;
 	public boolean isSelected();
+	public MenuElement setParent(Menu m);
 	/*
 	public void onKeyPress(Event e) throws Exception;
 	public void onKeyDown(Event e) throws Exception;

@@ -46,4 +46,10 @@ public class BasicWidget implements Widget{
 		lastEvent = e;
 	}
 
+	@Override
+	public void setGUI(GUI gui) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

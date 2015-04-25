@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import net.mc42.games.events.Event;
 import net.mc42.games.events.EventType;
 import net.mc42.games.gui.EventHandler;
+import net.mc42.games.gui.GUI;
 import net.mc42.games.gui.Widget;
 import net.mc42.global.Global;
 import net.mc42.global.Utils;
@@ -22,13 +23,14 @@ public class Menu implements Widget {
 	private int namePos;
 	private Font font;
 	private Color color;
+	private GUI gui;
 	
 	public Menu(String n){
 		name = n;
 	}
 	
 	public Menu addElement(MenuElement e){
-		elems.add(e.setFont(font).setPos(0, 0));
+		elems.add(e.setFont(font).setPos(0, 0).setParent(this));
 		return this;
 	}
 	public Menu setFont(Font e){
@@ -159,6 +161,17 @@ public class Menu implements Widget {
 		//for(int i=0;i<elems.size();i++){
 			if(selEl!=-1)elems.get(selEl).update(c,timeinms);
 		//}
+	}
+
+	@Override
+	public void setGUI(GUI g) {
+		// TODO Auto-generated method stub
+		gui = g;
+	}
+	
+	public GUI getGUI() {
+		// TODO Auto-generated method stub
+		return gui;
 	}
 
 }

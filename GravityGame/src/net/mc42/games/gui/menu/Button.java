@@ -41,6 +41,7 @@ public class Button implements MenuElement {
 	public static final int MODE_MOUSE_3 		= 0b000100000;
 	public static final int MODE_MOUSE_4 		= 0b001000000;
 	public static final int MODE_MOUSE_5 		= 0b010000000;
+	private Menu parent;
 	
 	public Button(String name, String text) throws Exception{
 		setClickModes(MODE_MOUSE_CLICK,MODE_MOUSE_1,MODE_MOUSE_2,MODE_MOUSE_3,MODE_MOUSE_4,MODE_MOUSE_5);
@@ -139,6 +140,11 @@ public class Button implements MenuElement {
 		return this;
 	}
 	
+	private void clickEx() throws Exception{
+		//clickAct.invoke(null, parent.getGUI(), this);
+		new ClickThread(clickAct,parent.getGUI(), this).start();
+	}
+	
 	public void draw(Graphics g)
 			throws Exception {
 		// TODO Auto-generated method stub
@@ -198,7 +204,7 @@ public class Button implements MenuElement {
 		else if(getModeSet(MODE_MOUSE_3)&&!getMouseButtonDown(3)&&f1_ct<=clickLen&&f1_ct!=0&&getModeSet(MODE_MOUSE_CLICK)){if(clickAct!=null)clickAct.invoke(null);f1_ct=0;}
 		else if(getModeSet(MODE_MOUSE_4)&&!getMouseButtonDown(4)&&f1_ct<=clickLen&&f1_ct!=0&&getModeSet(MODE_MOUSE_CLICK)){if(clickAct!=null)clickAct.invoke(null);f1_ct=0;}
 		else if(getModeSet(MODE_MOUSE_5)&&!getMouseButtonDown(5)&&f1_ct<=clickLen&&f1_ct!=0&&getModeSet(MODE_MOUSE_CLICK)){if(clickAct!=null)clickAct.invoke(null);f1_ct=0;}*/
-		if(!getMouseDown()&&f1_ct<=clickLen&&f1_ct!=0&&getModeSet(MODE_MOUSE_CLICK)){if(clickAct!=null)clickAct.invoke(null);f1_ct=0;}
+		if(!getMouseDown()&&f1_ct<=clickLen&&f1_ct!=0&&getModeSet(MODE_MOUSE_CLICK)){if(clickAct!=null)this.clickEx();f1_ct=0;}
 		}catch(Exception e){Global.log(Global.levels.WARNING, "Exeption while trying to execute click function", e);}
 		//Global.log(Global.levels.DEBUG, "mouseDown=" + mouseDown);
 		//Global.log(Global.levels.DEBUG, "\""+this.text+"\" count=" + f1_ct);
@@ -216,7 +222,7 @@ public class Button implements MenuElement {
 	public void onMouseup(Event e){
 		//if(e.getType().getVal()==0)Global.log(Global.levels.DEBUG,"Yae! I got clicked!");
 		mouseDown &= ~(1<<(e.getType().getVal()+1));
-		try{if(getModeSet(MODE_MOUSE_UP)&&clickAct!=null)clickAct.invoke(null);}catch(Exception ea){Global.log(Global.levels.WARNING, "Exeption while trying to execute click function", ea);}
+		try{if(getModeSet(MODE_MOUSE_UP)&&clickAct!=null)this.clickEx();}catch(Exception ea){Global.log(Global.levels.WARNING, "Exeption while trying to execute click function", ea);}
 	}
 	
 	@EventHandler
@@ -224,7 +230,7 @@ public class Button implements MenuElement {
 		//if(e.getType().getVal()==0)Global.log(Global.levels.DEBUG,"Yae! I got clicked!");
 		mouseDown |= 1<<(e.getType().getVal()+1);
 		if(f1_ct==0&&getModeSet(MODE_MOUSE_CLICK))f1_ct=1;
-		try{if(getModeSet(MODE_MOUSE_DOWN)&&clickAct!=null)clickAct.invoke(null);}catch(Exception ea){Global.log(Global.levels.WARNING, "Exeption while trying to execute click function", ea);}
+		try{if(getModeSet(MODE_MOUSE_DOWN)&&clickAct!=null)this.clickEx();}catch(Exception ea){Global.log(Global.levels.WARNING, "Exeption while trying to execute click function", ea);}
 	}
 	
 	@EventHandler
@@ -298,4 +304,27 @@ public class Button implements MenuElement {
 		return this;
 	}
 
+	@Override
+	public MenuElement setParent(Menu m) {
+		// TODO Auto-generated method stub]
+		parent = m;
+		return this;
+	}
+	private class ClickThread extends Thread{
+		Method m;
+		Object[] args;
+		protected ClickThread(Method m, Object... args){
+			this.m=m;
+			this.args = args;
+			setName("click");
+		}
+		public void run(){
+			try {
+				m.invoke(null, args);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				Global.log(Global.levels.WARNING, "Error in button click", e);
+			}
+		}
+	}
 }

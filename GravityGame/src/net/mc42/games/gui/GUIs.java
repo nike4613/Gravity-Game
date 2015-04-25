@@ -19,6 +19,7 @@ public class GUIs {
 	private static GameContainer gc;
 	//private static int exitKey = Keyboard.KEY_ESCAPE;
 	private static String selUI = "";
+	private static boolean updateAll = false;
 	
 	public static void init(GameContainer g){
 		gc = g;
@@ -140,11 +141,20 @@ public class GUIs {
 		return actives.get(name);
 	}
 	
+	public static void setUpdateAll(boolean b){
+		
+	}
+	
 	public static void updateGUIs(GameContainer gc, int timesinceupdate) throws Exception{
-		for(Entry<String, GUI> gui:guis.entrySet()){
-			if(getActive(gui.getKey())){
-				gui.getValue().update(gc, timesinceupdate);
+		if(updateAll){
+			for(Entry<String, GUI> gui:guis.entrySet()){
+				if(getActive(gui.getKey())){
+					gui.getValue().update(gc, timesinceupdate);
+				}
 			}
+		} else {
+			if(selUI==""||!getActive(selUI))return;
+			getGUI(selUI).update(gc, timesinceupdate);
 		}
 	}
 	
