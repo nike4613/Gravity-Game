@@ -6,6 +6,7 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 
 import net.mc42.games.GameMain;
+import net.mc42.games.gui.BasicWidget;
 import net.mc42.games.gui.EventHandler;
 import net.mc42.games.gui.GUI;
 import net.mc42.games.gui.GUIs;
@@ -41,6 +42,7 @@ public class GravityGameMain extends GameMain{
 	public void init(GameContainer gc) throws Exception {
 		// TODO Auto-generated method stub
 		setExitKeyCombo(Keyboard.KEY_LCONTROL,Keyboard.KEY_Q);
+		new GUI("ui3", "testgui", new BasicWidget(), 0).setPos(10, 10, 300, 300);
 		new GUI( "mainui", "testgui", new Menu("Test Menu")
 			.setFont( gc.getGraphics().getFont() )
 			.setFontColor(Color.green)

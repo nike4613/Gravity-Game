@@ -1,9 +1,9 @@
 package net.mc42.games.gui;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import net.mc42.games.events.Event;
 import net.mc42.games.events.EventType;
@@ -43,6 +43,7 @@ public class GUIs {
 						break;
 					} else {
 						selUI = "";
+						getGUI(name).processEvents(new Event(gc, EventType.MOUSEMOVE, 0, 0));
 					}
 				} else {
 					selUI = "";
@@ -104,6 +105,7 @@ public class GUIs {
 						break;
 					} else {
 						selUI = "";
+						getGUI(name).processEvents(new Event(gc, EventType.MOUSEMOVE, 0, 0));
 					}
 				} else {
 					selUI = "";
@@ -147,9 +149,9 @@ public class GUIs {
 	
 	public static void updateGUIs(GameContainer gc, int timesinceupdate) throws Exception{
 		if(updateAll){
-			for(Entry<String, GUI> gui:guis.entrySet()){
-				if(getActive(gui.getKey())){
-					gui.getValue().update(gc, timesinceupdate);
+			for(String name:renderOrder){
+				if(getActive(name)){
+					getGUI(name).update(gc, timesinceupdate);
 				}
 			}
 		} else {
@@ -159,7 +161,9 @@ public class GUIs {
 	}
 	
 	public static void drawGUIs(Graphics g) throws Exception{
-		for(String name:renderOrder){
+		ArrayList<String> rod = (ArrayList<String>) renderOrder.clone();
+		Collections.reverse(rod);
+		for(String name:rod){
 			if(getActive(name)){
 				getGUI(name).draw(g); 
 			}
