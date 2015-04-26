@@ -4,14 +4,12 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 
 public abstract class GameMain {
-	private GameContainer gc;
 	private MainClass g;
 	public GameMain(){}
 	protected void setExitKeyCombo(int... keyCombo){
 		g.setExitKeys(keyCombo);
 	}
 	protected void initI(GameContainer gc, MainClass g) throws Exception{
-		this.gc = gc;
 		this.g = g;
 		init(gc);
 	}

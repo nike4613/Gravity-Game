@@ -1,7 +1,10 @@
 package net.mc42.games;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Enumeration;
 import java.util.Properties;
 
 import net.mc42.games.gui.EventHandler;
@@ -33,13 +36,15 @@ public class MainClass extends BasicGame
 		super(gamename);
 	}
 	
-	long exit=0;private void checkForceExit(GameContainer gc){long is=0,tmp=exit<<8;boolean down=true;while((tmp=(tmp>>8))!=0){is=(tmp&0xFF);down=down&&gc.getInput().isKeyDown((int)is);}if(down){System.exit(0);}}protected void setExitKeys(int... keys){int i=0,out=0;for(int key:keys){out|=key<<(i++*8);}exit=out;Thread t=new Thread(){public void run(){deInit();}};t.setName("deinit");Runtime.getRuntime().addShutdownHook(t);}
+	long exit=0;private void checkForceExit(GameContainer gc){long is=0,tmp=exit<<8;boolean down=true;while((tmp=(tmp>>8))!=0){is=(tmp&0xFF);down=down&&gc.getInput().isKeyDown((int)is);}if(down){System.exit(0);}}protected void setExitKeys(int... keys){int i=0,out=0;for(int key:keys){out|=key<<(i++*8);}exit=out;Thread t=new Thread(){public void run(){try{deInit();}catch(Exception e){}}};t.setName("deinit");Runtime.getRuntime().addShutdownHook(t);}
 	
-	private static void deInit(){
+	private static void deInit() throws Exception{
 		//Cleanup
-		Global.log(Global.levels.INFO, "Closing program... But why?");
+		//Global.log(Global.levels.INFO, "Closing program... But why?");
+		Global.log(Global.levels.INFO, props.getProperty("exitLogMessage"));
 		try {mainObj.deInit();} catch (Exception e) {}
 		globalShare.exit();
+		props.store(new FileOutputStream(new File(System.getProperty("user.dir")+"/configs/properties.ini")), "Properties");
 	}
 	
 	@Override
@@ -119,6 +124,8 @@ public class MainClass extends BasicGame
 		defs.setProperty("unDecorated", "false");
 		defs.setProperty("fullscreen", "true");
 		defs.setProperty("fps", "60");
+		defs.setProperty("exitLogMessage", "Closing game...");
+		defs.setProperty("title", "MC42 Slick UI and Engine Frontend");
 		try {
 			
 			defs.load(ClassLoader.getSystemResourceAsStream("resources/properties.ini"));
@@ -129,18 +136,24 @@ public class MainClass extends BasicGame
 				propf.createNewFile();
 			}
 			props.load(new FileInputStream(propf));
-			props.store(new FileOutputStream(propf), "Properties");
+			//props.store(new FileOutputStream(propf), "Properties");
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			Global.log(Global.levels.WARNING, "Failed to load properties... using defaults", e1);
 			props = defs;
 		}
-		Thread.currentThread().setName("main");
+		Thread.currentThread().setName("execution");
 		Global.setDebugMode(props.getProperty("debugMode").contains("true"));
 		System.setProperty("org.lwjgl.opengl.Window.undecorated",props.getProperty("unDecorated"));
 		Global.log(Global.levels.DEBUG, "Beggining program");
 		
+		Enumeration<?> enumr = props.propertyNames();
 		
+		while(enumr.hasMoreElements()){
+			String name=enumr.nextElement().toString();
+			
+			if(name.startsWith("sys."))System.setProperty(name.substring(4), props.getProperty(name));
+		}
 		
 		//System.exit(0);;
 		try
@@ -154,7 +167,7 @@ public class MainClass extends BasicGame
 			}
 			Global.log(Global.levels.DEBUG, "Display mode is as follows: " + best.toString());
 			
-			AppGameContainer appgc = new AppGameContainer(new MainClass("Simple Slick Game"));
+			AppGameContainer appgc = new AppGameContainer(new MainClass(props.getProperty("title")));
 			appgc.setDisplayMode(/*best.getWidth()*/640, /*best.getHeight()*/480, false);
 			appgc.setTargetFrameRate(/*best.getFrequency()*60*/Integer.parseInt(props.getProperty("fps")));
 			appgc.setShowFPS(false);

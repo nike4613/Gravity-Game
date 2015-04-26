@@ -51,8 +51,8 @@ public class Global {
 		}
 	}
 	
-	public static void setLogger(Class<ILogger> log) throws InstantiationException, IllegalAccessException{
-		logger = log.newInstance();
+	public static void setLogger(ILogger log) throws InstantiationException, IllegalAccessException{
+		logger = log;
 	}
 	
 	public static void setDebugMode(boolean b){

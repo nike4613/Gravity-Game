@@ -1,10 +1,5 @@
 package net.mc42.games.GravityGame;
 
-import org.lwjgl.input.Keyboard;
-import org.newdawn.slick.Color;
-import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.Graphics;
-
 import net.mc42.games.GameMain;
 import net.mc42.games.gui.BasicWidget;
 import net.mc42.games.gui.EventHandler;
@@ -15,6 +10,11 @@ import net.mc42.games.gui.menu.Menu;
 import net.mc42.games.gui.menu.MenuElement;
 import net.mc42.global.Global;
 import net.mc42.global.Utils;
+
+import org.lwjgl.input.Keyboard;
+import org.newdawn.slick.Color;
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Graphics;
 
 public class GravityGameMain extends GameMain{
 
@@ -35,12 +35,13 @@ public class GravityGameMain extends GameMain{
 	}
 	@EventHandler
 	public static void closeGame(GUI g,MenuElement m){
+		Global.log(Global.levels.DEBUG, "closing program from button " + m.toString());
 		System.exit(0);
 	}
 	
 	@Override
 	public void init(GameContainer gc) throws Exception {
-		// TODO Auto-generated method stub
+		
 		setExitKeyCombo(Keyboard.KEY_LCONTROL,Keyboard.KEY_Q);
 		new GUI("ui3", "testgui", new BasicWidget(), 0).setPos(10, 10, 300, 300);
 		new GUI( "mainui", "testgui", new Menu("Test Menu")

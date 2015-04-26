@@ -4,6 +4,7 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 
 import net.mc42.global.Global;
+import net.mc42.global.LogSysToLogger;
 
 /**
  * A simple central logging system
@@ -13,7 +14,6 @@ import net.mc42.global.Global;
 public final class Log {
 	/** true if activated by the system property "org.newdawn.slick.forceVerboseLog" */
 	private static boolean forcedVerbose = false;
-	
 	/**
 	 * The debug property which can be set via JNLP or startup parameter to switch
 	 * logging mode to verbose for games that were released without verbose logging
@@ -38,8 +38,10 @@ public final class Log {
 	 * sent to it.
 	 * 
 	 * @param system The system to use for logging.
+	 * @throws Exception 
 	 */
-	public static void setLogSystem(LogSystem system) {
+	public static void setLogSystem(LogSystem system) throws Exception {
+		Global.setLogger(new LogSysToLogger(system));
 	}
 	
 	/**
