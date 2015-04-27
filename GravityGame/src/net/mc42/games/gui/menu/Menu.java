@@ -58,7 +58,7 @@ public class Menu implements Widget {
 			//MenuElement el = elems.get(i);
 			elems.get(i).setDrawPosOff(x, y);
 			elems.get(i).setPos((szx/2)-(elems.get(i).getSize().first/2), ny);
-			elems.get(i).draw(g);
+			elems.get(i).drawI(g);
 			ny += 5+elems.get(i).getSize().last;
 		}
 		
@@ -85,7 +85,7 @@ public class Menu implements Widget {
 					Utils.getAnnotatedMethod(
 						EventHandler.class, 
 						elems.get(i).getClass(), 
-						"onDeselect"
+						"onDeselectI"
 					).invoke(
 						elems.get(i),
 						new DeselectEvent(e.getGameContainer(), x, y)
@@ -100,7 +100,7 @@ public class Menu implements Widget {
 				Utils.getAnnotatedMethod(
 						EventHandler.class, 
 						elems.get(selEl).getClass(), 
-						"onDeselect"
+						"onDeselectI"
 					).invoke(
 						elems.get(selEl),
 						new DeselectEvent(e.getGameContainer(), x, y)
@@ -110,7 +110,7 @@ public class Menu implements Widget {
 				Utils.getAnnotatedMethod(
 						EventHandler.class, 
 						elems.get(selEl).getClass(), 
-						"onSelect"
+						"onSelectI"
 					).invoke(
 						elems.get(selEl),
 						new SelectEvent(e.getGameContainer(), x, y)

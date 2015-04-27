@@ -1,16 +1,11 @@
 package net.mc42.games;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Properties;
 
-import net.mc42.games.gui.EventHandler;
-import net.mc42.games.gui.GUI;
 import net.mc42.games.gui.GUIs;
-import net.mc42.games.gui.menu.MenuElement;
 import net.mc42.global.BaseClass;
 import net.mc42.global.Global;
 
@@ -112,7 +107,6 @@ public class MainClass extends BasicGame
 		mainObj.render(gc, g);
 		
 	} catch (Exception e) {
-			// TODO Auto-generated catch block
 		Global.log(Global.levels.SEVERE, "Error in Game.render()", e);
 	}}
 
@@ -138,7 +132,6 @@ public class MainClass extends BasicGame
 			props.load(new FileInputStream(propf));
 			//props.store(new FileOutputStream(propf), "Properties");
 		} catch (Exception e1) {
-			// TODO Auto-generated catch block
 			Global.log(Global.levels.WARNING, "Failed to load properties... using defaults", e1);
 			props = defs;
 		}
@@ -152,14 +145,14 @@ public class MainClass extends BasicGame
 		while(enumr.hasMoreElements()){
 			String name=enumr.nextElement().toString();
 			
-			if(name.startsWith("sys."))System.setProperty(name.substring(4), props.getProperty(name));
+			if(name.startsWith("Sys:"))System.setProperty(name.substring(4), props.getProperty(name));
 		}
 		
 		//System.exit(0);;
 		try
 		{
 			DisplayMode best = new DisplayMode(0, 0);
-			DisplayMode[] dss = Display.getAvailableDisplayModes();
+			//DisplayMode[] dss = Display.getAvailableDisplayModes();
 			for(DisplayMode ds:Display.getAvailableDisplayModes()){
 				if(ds.getFrequency()>=60&&ds.isFullscreenCapable()&&ds.getBitsPerPixel()>=24){
 					if(ds.getHeight()>best.getHeight()&&ds.getWidth()>best.getWidth()) best = ds;
@@ -176,7 +169,6 @@ public class MainClass extends BasicGame
 				Global.log(Global.levels.DEBUG, "Setting application icons");
 				appgc.setIcons(new String[]{"resources/icon/gameIcon32.png","resources/icon/gameIcon24.png","resources/icon/gameIcon16.png"});
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				Global.log(Global.levels.WARNING, "Error occured while setting icons... Continuing", e);
 			}
 			try{
