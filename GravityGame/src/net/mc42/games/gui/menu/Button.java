@@ -97,6 +97,11 @@ public class Button extends MenuElement {
 	
 	//public Button(){}
 	
+	/**
+	 * Sets the click action
+	 * @param m The method to activate on a click
+	 * @return this
+	 */
 	public Button setClickAction(Method m){
 		clickAct = m;
 		return this;
@@ -200,7 +205,7 @@ public class Button extends MenuElement {
 	public void onSelect(SelectEvent e) throws Exception {
 		// TODO Auto-generated method stub
 		//Global.log(Global.levels.DEBUG,"I got selected!!!");
-		selected = true;
+		//selected = true;
 	}
 
 	@EventHandler
@@ -221,13 +226,13 @@ public class Button extends MenuElement {
 	@EventHandler
 	public void onKeyup(Event e) throws Exception {
 		// TODO Auto-generated method stub
-		Global.log(Global.levels.DEBUG, "ku:" + e.getType().getVal());
+		//Global.log(Global.levels.DEBUG, "ku:" + e.getType().getVal());
 	}
 
 	@EventHandler
 	public void onKeydown(Event e) throws Exception {
 		// TODO Auto-generated method stub
-		Global.log(Global.levels.DEBUG, "kd:" + e.getType().getVal());
+		//Global.log(Global.levels.DEBUG, "kd:" + e.getType().getVal());
 	}
 	
 	@EventHandler

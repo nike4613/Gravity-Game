@@ -1,3 +1,22 @@
 <select image="/resources/gui/select.png">
-	
+	<closed>
+		<sect por="l" x="0"   	y="0" 	width="24" 	height="50"></sect>
+		<sect por="m" x="26" 	y="0" 	width="100" height="50"></sect>
+		<sect por="r" x="144"	y="0" 	width="24" 	height="50"></sect>
+	</closed>
+	<hovered>
+		<sect por="l" x="0"   	y="150" width="24" 	height="50"></sect>
+		<sect por="m" x="26" 	y="150" width="100" height="50"></sect>
+		<sect por="r" x="144"	y="150" width="24" 	height="50"></sect>
+	</hovered>
+	<open>
+		<sect por="l" x="0"   	y="50" 	width="24" 	height="50"></sect>
+		<sect por="m" x="26" 	y="50" 	width="100" height="50"></sect>
+		<sect por="r" x="144"	y="50" 	width="24" 	height="50"></sect>
+	</open>
+	<extension>
+		<sect por="l" x="0"   	y="100" width="24" 	height="50"></sect>
+		<sect por="m" x="26" 	y="100" width="100" height="50"></sect>
+		<sect por="r" x="144"	y="100" width="24" 	height="50"></sect>
+	</extension>
 </select>

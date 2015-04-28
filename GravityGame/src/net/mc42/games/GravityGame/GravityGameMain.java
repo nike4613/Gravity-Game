@@ -8,7 +8,9 @@ import net.mc42.games.gui.GUIs;
 import net.mc42.games.gui.menu.Button;
 import net.mc42.games.gui.menu.Menu;
 import net.mc42.games.gui.menu.MenuElement;
+import net.mc42.games.gui.menu.Select;
 import net.mc42.global.Global;
+import net.mc42.global.Pair;
 import net.mc42.global.Utils;
 
 import org.lwjgl.input.Keyboard;
@@ -66,6 +68,9 @@ public class GravityGameMain extends GameMain{
 			.addElement(
 				new Button("button","Close Game")
 				.setClickAction(Utils.getAnnotatedMethod(EventHandler.class, this.getClass(), "closeGame"))
+			)
+			.addElement(
+				new Select("select", new Pair("Hi!",null),new Pair("Lo!",null))	
 			)
 		,0,false).setPos(50, 180, 300, 250);
 	}
