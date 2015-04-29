@@ -8,6 +8,7 @@ import net.mc42.games.gui.EventHandler;
 import net.mc42.games.gui.GUI;
 import net.mc42.games.gui.Widget;
 import net.mc42.global.Global;
+import net.mc42.global.Pair;
 import net.mc42.global.Utils;
 
 import org.newdawn.slick.Color;
@@ -123,6 +124,18 @@ public class Menu implements Widget {
 						EventHandler.class, 
 						elems.get(selEl).getClass(), 
 						"onDrag"
+					).invoke(
+						elems.get(selEl),
+						e
+					);
+			}
+			if(e.getType().equals(EventType.MOUSEMOVE)){
+				if(selEl==-1)return;
+				e.setPos(new Pair<Integer,Integer>(e.getPos().first-elems.get(selEl).getPos().first,e.getPos().last-elems.get(selEl).getPos().last));
+				Utils.getAnnotatedMethod(
+						EventHandler.class, 
+						elems.get(selEl).getClass(), 
+						"onMousemove"
 					).invoke(
 						elems.get(selEl),
 						e

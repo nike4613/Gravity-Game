@@ -37,7 +37,7 @@ public class Event {
 	}
 	
 	public String toString(){
-		return "{etype:\"" + etype.toString() + "\",pos:\"" + getPos().toString() + "\"}";
+		return "{etype:" + etype.toString() + ",pos:" + getPos().toString() + "}";
 	}
 	
 }

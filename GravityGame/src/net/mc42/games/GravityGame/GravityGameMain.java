@@ -70,7 +70,16 @@ public class GravityGameMain extends GameMain{
 				.setClickAction(Utils.getAnnotatedMethod(EventHandler.class, this.getClass(), "closeGame"))
 			)
 			.addElement(
-				new Select("select", new Pair("Hi!",null),new Pair("Lo!",null))	
+				new Select("select", 
+					new Pair("Hi!",null),
+					new Pair("Mid!",null),
+					new Pair("Really?",null),
+					new Pair("Lo!",null)
+				)	
+			)
+			.addElement(
+				new Button("button","Close Game")
+				.setClickAction(Utils.getAnnotatedMethod(EventHandler.class, this.getClass(), "closeGame"))
 			)
 		,0,false).setPos(50, 180, 300, 250);
 	}

@@ -6,6 +6,7 @@ import java.util.Arrays;
 
 import net.mc42.games.ImageUtils;
 import net.mc42.games.events.Event;
+import net.mc42.games.gui.EventHandler;
 import net.mc42.global.Global;
 import net.mc42.global.Pair;
 
@@ -23,16 +24,20 @@ public class Select extends MenuElement {
 	private Image[] im_hovered = new Image[3];
 	private Image[] im_extension = new Image[3];
 	private Image[] im_open = new Image[3];
+	private Image[] im_clicked = new Image[3];
+	private Image[] im_extension_sel = new Image[3];
 	
 	private int current = 0;
 	private ArrayList<Pair<String,Object>> options;
 	
 	private Method clickAct;
 
-	private int mouseDown;	
+	private int mouseDown = 0x0;	
 	
 	private int texwidth = -1;
 	
+	private int selEl = -1;
+
 	/**
 	 * Constructs the select element.
 	 * @param name The name of the xml file to load the image from.
@@ -86,6 +91,20 @@ public class Select extends MenuElement {
 						img.getSubImage(ej.getIntAttribute("x"), ej.getIntAttribute("y"), ej.getIntAttribute("width"), ej.getIntAttribute("height"));
 				}
 			}
+			if(e.getName()=="clicked"){
+				for(int ik = 0;ik<e.getChildren().size();ik++){
+					XMLElement ej = e.getChildren().get(ik);
+					im_clicked[Integer.parseInt(ej.getAttribute("por").replace('l', '0').replace('m', '1').replace('r', '2'))] = 
+						img.getSubImage(ej.getIntAttribute("x"), ej.getIntAttribute("y"), ej.getIntAttribute("width"), ej.getIntAttribute("height"));
+				}
+			}
+			if(e.getName()=="extension-selected"){
+				for(int ik = 0;ik<e.getChildren().size();ik++){
+					XMLElement ej = e.getChildren().get(ik);
+					im_extension_sel[Integer.parseInt(ej.getAttribute("por").replace('l', '0').replace('m', '1').replace('r', '2'))] = 
+						img.getSubImage(ej.getIntAttribute("x"), ej.getIntAttribute("y"), ej.getIntAttribute("width"), ej.getIntAttribute("height"));
+				}
+			}
 		}
 		
 		options = new ArrayList<Pair<String,Object>>(Arrays.asList(opts));
@@ -106,9 +125,10 @@ public class Select extends MenuElement {
 	public void draw(Graphics g) throws Exception {
 		// TODO Auto-generated method stub
 		Image[] i= new Image[3];
-		i = (open)?im_open:im_closed;
-		i = (selected)?im_hovered:i;
-		//g.drawRect(x+offx, y+offy, xsz, ysz);
+		
+		i = (selected)?im_hovered:im_closed;
+		i = (getMouseDown())?im_clicked:i;
+		i = (open)?im_open:i;
 		
 		if(texwidth<0){
 			for(Pair<String,Object> p:options){
@@ -118,6 +138,7 @@ public class Select extends MenuElement {
 		
 		int x=this.x+ofx,y=this.y+ofy;
 		int nsx=szx,nsy=szy;
+		
 		String text = options.get(current).first;
 		
 		int h=0;
@@ -134,6 +155,34 @@ public class Select extends MenuElement {
 		
 		nsx = i[2].getWidth()+w.first+i[0].getWidth();
 		nsy = (i[2].getHeight()+w.last+i[0].getHeight())/3;
+		
+		if(open){
+			@SuppressWarnings("unchecked")
+			ArrayList<Pair<String,Object>> a = (ArrayList<Pair<String,Object>>) options.clone();
+			a.remove(current);
+			
+			y = y+(i[2].getHeight()+w.last+i[0].getHeight())/3;
+			
+			for (int idx=0;idx<a.size();idx++){
+				Global.log(Global.levels.DEBUG, idx+"="+selEl);
+				i = (selEl>=0&&idx==selEl)?im_extension_sel:im_extension;
+				text = a.get(idx).first;
+				
+				h=((h=(g.getFont().getHeight(text)/i[0].getHeight()))>1)?h:1;
+				
+				i[0]=i[0].getScaledCopy(h);i[1]=i[1].getScaledCopy(h);i[2]=i[2].getScaledCopy(h);
+				
+				i[0].draw(x, y);
+				w=ImageUtils.tileImageToApproxSize(i[1], x+i[0].getWidth(), y, texwidth, 1);
+				i[2].draw(x+w.first+i[0].getWidth(), y);
+				texh = (w.last/2)-(g.getFont().getHeight(text)/2);
+				texw = (w.first/2)-(texwidth/2);
+				g.drawString(text, x+i[0].getWidth()+texw, y+texh);
+				y = y+(i[2].getHeight()+w.last+i[0].getHeight())/3;
+			}
+		
+			nsy = im_extension[0].getHeight()*options.size();//(i[2].getHeight()+w.last+i[0].getHeight())/3;
+		}
 		
 		setSize(nsx, nsy);
 	}
@@ -159,23 +208,43 @@ public class Select extends MenuElement {
 	@Override
 	public void onDeselect(DeselectEvent e) throws Exception {
 		// TODO Auto-generated method stub
-		
+		open = false;
 	}
 	
+	@EventHandler
 	public void onMouseup(Event e){
+		//Global.log(Global.levels.DEBUG, e.toString());
 		mouseDown &= ~(1<<(e.getType().getVal()+1));
 	}
-	
+
+	@EventHandler
 	public void onMousedown(Event e){
+		//Global.log(Global.levels.DEBUG, e.toString());
 		mouseDown |= 1<<(e.getType().getVal()+1);
+		if(!open)open=true;
+		else if(open){
+			@SuppressWarnings("unchecked")
+			ArrayList<Pair<String,Object>> a = (ArrayList<Pair<String,Object>>) options.clone();
+			a.remove(current);
+			current = options.indexOf(a.get(selEl));
+			open=false;
+		}
+	}
+	
+	@EventHandler
+	public void onMousemove(Event e){
+		//Global.log(Global.levels.DEBUG, e.toString());
+		if(open){
+			int idx = e.getPos().last/im_extension[0].getHeight();
+			selEl = idx-1;
+			Global.log(Global.levels.DEBUG, "" + selEl);
+		} else {
+			selEl = -1;
+		}
 	}
 	
 	private boolean getMouseDown(){
-		for(int i=0;i<5;i++){
-			if(getMouseButtonDown(i))
-				return true;
-		}
-		return false;
+		return (mouseDown!=0);
 	}
 	
 	private boolean getMouseButtonDown(int mouse){
