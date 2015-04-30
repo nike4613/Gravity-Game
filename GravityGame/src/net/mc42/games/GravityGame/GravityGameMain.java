@@ -40,6 +40,10 @@ public class GravityGameMain extends GameMain{
 		Global.log(Global.levels.DEBUG, "closing program from button " + m.toString());
 		System.exit(0);
 	}
+	@EventHandler
+	public static void selectAct(GUI g, MenuElement m, Object obj){
+		Global.log(Global.levels.DEBUG, obj.toString());
+	}
 	
 	@Override
 	public void init(GameContainer gc) throws Exception {
@@ -71,11 +75,12 @@ public class GravityGameMain extends GameMain{
 			)
 			.addElement(
 				new Select("select", 
-					new Pair("Hi!",null),
-					new Pair("Mid!",null),
-					new Pair("Really?",null),
-					new Pair("Lo!",null)
-				)	
+					new Pair("Hi!","fst"),
+					new Pair("Mid!","scnd"),
+					new Pair("Really?","thrd"),
+					new Pair("Lo!","lst")
+				)
+				.setAction(Utils.getAnnotatedMethod(EventHandler.class, this.getClass(), "selectAct"))
 			)
 			.addElement(
 				new Button("button","Close Game")
@@ -92,9 +97,7 @@ public class GravityGameMain extends GameMain{
 
 	@Override
 	public void render(GameContainer gc, Graphics g) throws Exception{
-		// TODO Auto-generated method stub
-		g.setColor(Color.white);
-		g.drawString("Howdy!", 100, 100);
+	
 	}
 	@Override
 	public void deInit() throws Exception {

@@ -116,7 +116,7 @@ public class Select extends MenuElement {
 	 * @param m The method to activate on a selection
 	 * @return this
 	 */
-	public Select setClickAction(Method m){
+	public Select setAction(Method m){
 		clickAct = m;
 		return this;
 	}
@@ -164,7 +164,7 @@ public class Select extends MenuElement {
 			y = y+(i[2].getHeight()+w.last+i[0].getHeight())/3;
 			
 			for (int idx=0;idx<a.size();idx++){
-				Global.log(Global.levels.DEBUG, idx+"="+selEl);
+				//Global.log(Global.levels.DEBUG, idx+"="+selEl);
 				i = (selEl>=0&&idx==selEl)?im_extension_sel:im_extension;
 				text = a.get(idx).first;
 				
@@ -218,7 +218,7 @@ public class Select extends MenuElement {
 	}
 
 	@EventHandler
-	public void onMousedown(Event e){
+	public void onMousedown(Event e) throws Exception{
 		//Global.log(Global.levels.DEBUG, e.toString());
 		mouseDown |= 1<<(e.getType().getVal()+1);
 		if(!open)open=true;
@@ -227,6 +227,9 @@ public class Select extends MenuElement {
 			ArrayList<Pair<String,Object>> a = (ArrayList<Pair<String,Object>>) options.clone();
 			a.remove(current);
 			current = options.indexOf(a.get(selEl));
+			
+			clickEx(options.get(current).last);
+			
 			open=false;
 		}
 	}
@@ -237,7 +240,7 @@ public class Select extends MenuElement {
 		if(open){
 			int idx = e.getPos().last/im_extension[0].getHeight();
 			selEl = idx-1;
-			Global.log(Global.levels.DEBUG, "" + selEl);
+			//Global.log(Global.levels.DEBUG, "" + selEl);
 		} else {
 			selEl = -1;
 		}
@@ -245,6 +248,11 @@ public class Select extends MenuElement {
 	
 	private boolean getMouseDown(){
 		return (mouseDown!=0);
+	}
+	
+	private void clickEx(Object obj) throws Exception{
+		//clickAct.invoke(null, parent.getGUI(), this);
+		new ActionThread(clickAct,parent.getGUI(), this, obj).start();
 	}
 	
 	private boolean getMouseButtonDown(int mouse){
