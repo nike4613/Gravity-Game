@@ -3,8 +3,10 @@ package net.mc42.games.gui;
 import net.mc42.games.ImageUtils;
 import net.mc42.games.events.Event;
 import net.mc42.games.events.EventType;
+import net.mc42.global.Global;
 import net.mc42.global.Pair;
 
+import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -30,6 +32,8 @@ public class GUI {
 	private Widget widget;
 	private int x,y,szx,szy = 0;
 	private String name;
+	private int scrollAmount = 0;
+	private boolean scrollable = false;
 	
 	/***********************************************************************
 	 * Constructs a new GUI object from image and XML file using widget w. *
@@ -72,6 +76,11 @@ public class GUI {
 		GUIs.regGUI(this, name, active, renderOrder);
 	}
 	
+	public void incScroll(int amou){
+		Global.log(Global.levels.DEBUG, "" + amou);
+		scrollAmount += amou;
+	}
+	
 	public String getName(){
 		return name;
 	}
@@ -101,8 +110,8 @@ public class GUI {
 			(new Pair<Integer,Integer>(x,y), new Pair<Integer,Integer>(szx,szy));
 	}
 	
-	public void draw(Graphics g) throws Exception{
-		draw(x,y,szx,szy,g);
+	public void draw(Graphics g, GameContainer gc) throws Exception{
+		draw(x,y,szx,szy,g,gc);
 	}
 	
 	/**
@@ -113,7 +122,8 @@ public class GUI {
 	 * @param szy The y size 
 	 * @throws Exception
 	 */
-	public void draw(int x, int y, int szx, int szy, Graphics g) throws Exception{
+	public void draw(int x, int y, int szx, int szy, Graphics g, GameContainer gc) throws Exception{
+		//GL11.glViewport(x, y, width, height);
 		int inx,iny=0;
 		int cx=x;
 		int cy=y;
@@ -184,8 +194,19 @@ public class GUI {
 			szx=szx-margin*2;
 			szy=szy-margin*2;
 		}
-		if(widget!=null)
-			widget.draw(inx, iny, szx, szy, g);
+		if(widget!=null){
+			//GL11.glViewport(inx, iny, szx, szy);
+			GL11.glEnable(GL11.GL_SCISSOR_TEST);
+			GL11.glScissor(inx, Math.abs(gc.getHeight()-iny)-szy, szx, szy);
+			
+			//Global.log(Global.levels.DEBUG, "" + scrollAmount);
+			
+			widget.titlePos(inx, iny, szx, szy, g);
+			widget.draw(inx, iny-scrollAmount, szx, szy, g);
+			
+			GL11.glDisable(GL11.GL_SCISSOR_TEST);
+			//GL11.glViewport(0, 0, gc.getWidth(), gc.getHeight());
+		}
 	}
 	
 }

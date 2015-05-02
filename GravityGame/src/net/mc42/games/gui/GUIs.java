@@ -84,12 +84,13 @@ public class GUIs {
 			if(selUI=="") return;
 			getGUI(selUI).processEvents(e);
 		}
-		if(e.getType().equals(EventType.MOUSEWHEELDOWN)){
+		if(e.getType().equals(EventType.MOUSEWHEELDOWN)||e.getType().equals(EventType.MOUSEWHEELUP)){
 			if(selUI=="") return;
-			getGUI(selUI).processEvents(e);
-		}
-		if(e.getType().equals(EventType.MOUSEWHEELUP)){
-			if(selUI=="") return;
+			
+			Global.log(Global.levels.DEBUG, e.toString());
+			
+			getGUI(selUI).incScroll(-e.getType().getVal());
+			
 			getGUI(selUI).processEvents(e);
 		}
 		if(e.getType().equals(EventType.DRAG)){
@@ -160,12 +161,13 @@ public class GUIs {
 		}
 	}
 	
-	public static void drawGUIs(Graphics g) throws Exception{
+	public static void drawGUIs(Graphics g,GameContainer gc) throws Exception{
+		@SuppressWarnings("unchecked")
 		ArrayList<String> rod = (ArrayList<String>) renderOrder.clone();
 		Collections.reverse(rod);
 		for(String name:rod){
 			if(getActive(name)){
-				getGUI(name).draw(g); 
+				getGUI(name).draw(g,gc); 
 			}
 		}
 	}

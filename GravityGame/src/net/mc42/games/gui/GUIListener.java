@@ -23,7 +23,7 @@ public class GUIListener implements InputListener {
 	@Override
 	public void mouseWheelMoved(int change) {
 		// TODO Auto-generated method stub
-		GUIs.processEvents(new Event(gc, ((change>0)?EventType.MOUSEWHEELUP:EventType.MOUSEDOWN).setVal(change), 0, 0));
+		GUIs.processEvents(new Event(gc, ((change>0)?EventType.MOUSEWHEELUP:EventType.MOUSEWHEELDOWN).setVal(change), 0, 0));
 	}
 
 	@Override

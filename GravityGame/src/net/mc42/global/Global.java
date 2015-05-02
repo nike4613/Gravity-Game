@@ -19,19 +19,6 @@ public class Global {
 	public static void log(Global.levels l, String msg, Exception error){
 		logger.log(l, msg, error);
 	}
-	
-	public static void log(int up,Global.levels l, String msg){
-		logger.log(l, msg, null);
-	}
-	
-	public static void log(int up,Global.levels l, Exception error){
-		logger.log(l, null, error);
-	}
-	
-	public static void log(int up,Global.levels l, String msg, Exception error){
-		logger.log(l, msg, error);
-	}
-	
 	public static enum levels {
 		INFO ("Info"),
 		WARNING ("Warning"),

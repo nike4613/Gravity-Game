@@ -52,4 +52,11 @@ public class BasicWidget implements Widget{
 		
 	}
 
+	@Override
+	public void titlePos(int x, int y, int szx, int szy, Graphics g)
+			throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

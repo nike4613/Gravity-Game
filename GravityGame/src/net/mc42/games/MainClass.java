@@ -102,7 +102,7 @@ public class MainClass extends BasicGame
 		//g.setColor(Color.red);
 		//g.drawString("AHAhahaHAHahAaH!\naHAHahahHAhahAHAha!", 100, 120);
 		
-		GUIs.drawGUIs(g);
+		GUIs.drawGUIs(g, gc);
 		
 		mainObj.render(gc, g);
 		

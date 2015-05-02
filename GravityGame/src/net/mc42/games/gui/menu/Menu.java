@@ -25,6 +25,7 @@ public class Menu implements Widget {
 	private Font font;
 	private Color color;
 	private GUI gui;
+	private int namePosY;
 	
 	public Menu(String n){
 		name = n;
@@ -44,6 +45,11 @@ public class Menu implements Widget {
 	}
 
 	@Override
+	public void titlePos(int x,int y, int szx, int szy, Graphics g){
+		namePosY = (szx/2)-(g.getFont().getWidth(name)/2)+x;
+	}
+	
+	@Override
 	public void draw(int x, int y, int szx, int szy, Graphics g)
 			throws Exception {
 		// TODO Auto-generated method stub
@@ -54,7 +60,7 @@ public class Menu implements Widget {
 		
 		namePos = (szx/2)-(g.getFont().getWidth(name)/2)+x;
 		int ny = g.getFont().getHeight("AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz")+5;
-		g.drawString(name, namePos, y);
+		g.drawString(name, namePos, namePosY);
 		for(int i=0;i<elems.size();i++){
 			//MenuElement el = elems.get(i);
 			elems.get(i).setDrawPosOff(x, y);
