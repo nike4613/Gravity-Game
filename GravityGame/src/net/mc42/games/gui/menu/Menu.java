@@ -45,12 +45,12 @@ public class Menu implements Widget {
 	}
 
 	@Override
-	public void titlePos(int x,int y, int szx, int szy, Graphics g){
-		namePosY = (szx/2)-(g.getFont().getWidth(name)/2)+x;
+	public void titlePos(int x,int y, int szx, Graphics g){
+		namePosY = y;
 	}
 	
 	@Override
-	public void draw(int x, int y, int szx, int szy, Graphics g)
+	public int draw(int x, int y, int szx, Graphics g)
 			throws Exception {
 		// TODO Auto-generated method stub
 		Font tempFont = g.getFont();
@@ -71,6 +71,8 @@ public class Menu implements Widget {
 		
 		g.setFont(tempFont);
 		g.setColor(tempCol);
+		
+		return ny;
 	}
 	
 	public void processEvents(Event e){

@@ -21,16 +21,17 @@ public class BasicWidget implements Widget{
 	int cur = 0;
 	int w = 0;
 	@Override
-	public void draw(int x, int y, int szx, int szy, Graphics g) throws Exception {
+	public int draw(int x, int y, int szx, Graphics g) throws Exception {
 		// TODO Auto-generated method stub
 		Image i = new Image("resources/icon/gameIcon32.png");
 		i.setFilter(Image.FILTER_NEAREST);
-		i.getScaledCopy(szx, szy).draw(x, y);
+		i.getScaledCopy(szx, y).draw(x, y);
 		g.setFont(Fonts.getFont("default"));
 		w = (szx/(g.getFont().getWidth("TeNrOuJiMa")/"TeNrOuJiMa".length()));
 		g.drawString(s.substring(0, (w>s.length())?s.length():w), x, y);
 		//lastEvent = (lastEvent==null)?new Event((GameContainer) Global.mainShare.get(null), EventType.KEYDOWN, 0, 0):lastEvent;
 		g.drawString(lastEvent.toString(), x, y+30);
+		return 0;
 	}
 
 	@Override
@@ -52,9 +53,9 @@ public class BasicWidget implements Widget{
 		
 	}
 
+
 	@Override
-	public void titlePos(int x, int y, int szx, int szy, Graphics g)
-			throws Exception {
+	public void titlePos(int x, int y, int szx, Graphics g) throws Exception {
 		// TODO Auto-generated method stub
 		
 	}

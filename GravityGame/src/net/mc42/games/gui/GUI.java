@@ -34,6 +34,7 @@ public class GUI {
 	private String name;
 	private int scrollAmount = 0;
 	private boolean scrollable = false;
+	private int wHeight = 0;
 	
 	/***********************************************************************
 	 * Constructs a new GUI object from image and XML file using widget w. *
@@ -78,7 +79,11 @@ public class GUI {
 	
 	public void incScroll(int amou){
 		Global.log(Global.levels.DEBUG, "" + amou);
-		scrollAmount += amou;
+		if(scrollable)
+			scrollAmount += amou;
+		
+		if(scrollAmount<0) scrollAmount = 0;
+		if(scrollAmount>wHeight) scrollAmount = wHeight;
 	}
 	
 	public String getName(){
@@ -201,9 +206,15 @@ public class GUI {
 			
 			//Global.log(Global.levels.DEBUG, "" + scrollAmount);
 			
-			widget.titlePos(inx, iny, szx, szy, g);
-			widget.draw(inx, iny-scrollAmount, szx, szy, g);
-			
+			widget.titlePos(inx, iny, szx, g);
+			int height = widget.draw(inx, iny-scrollAmount, szx, g);
+			if(height>szy){
+				scrollable=true;
+				 wHeight = height-szy;
+			} else {
+				scrollable = false;
+				scrollAmount = 0;
+			}
 			GL11.glDisable(GL11.GL_SCISSOR_TEST);
 			//GL11.glViewport(0, 0, gc.getWidth(), gc.getHeight());
 		}
