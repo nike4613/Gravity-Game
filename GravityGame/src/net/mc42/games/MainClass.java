@@ -5,7 +5,7 @@ import java.io.FileOutputStream;
 import java.util.Enumeration;
 import java.util.Properties;
 
-import net.mc42.games.gui.GUIs;
+import net.mc42.games.guiutils.GUIs;
 import net.mc42.global.BaseClass;
 import net.mc42.global.Global;
 
@@ -47,7 +47,9 @@ public class MainClass extends BasicGame
 		try {
 			MainClass.globalShare = gc;
 			//Fonts.addFont("basefont");
-			GUIs.init(gc);
+			//GUIs.init(gc);
+			
+			GUIs.init();
 			
 			mainObj.initI(gc, this);
 			//setExitKeys(Keyboard.KEY_LCONTROL,Keyboard.KEY_Q);
@@ -85,7 +87,10 @@ public class MainClass extends BasicGame
 	@Override
 	public void update(GameContainer gc, int i) throws SlickException 
 	{try {
-		GUIs.updateGUIs(gc, i);
+		//GUIs.updateGUIs(gc, i);
+		
+		GUIs.update();
+		
 		mainObj.update(gc, i);
 		checkForceExit(gc);
 	} catch (Exception e) {
@@ -102,7 +107,9 @@ public class MainClass extends BasicGame
 		//g.setColor(Color.red);
 		//g.drawString("AHAhahaHAHahAaH!\naHAHahahHAhahAHAha!", 100, 120);
 		
-		GUIs.drawGUIs(g, gc);
+		//GUIs.drawGUIs(g, gc);
+		
+		GUIs.draw();
 		
 		mainObj.render(gc, g);
 		
@@ -119,7 +126,7 @@ public class MainClass extends BasicGame
 		defs.setProperty("fullscreen", "true");
 		defs.setProperty("fps", "60");
 		defs.setProperty("exitLogMessage", "Closing game...");
-		defs.setProperty("title", "MC42 Slick UI and Engine Frontend");
+		defs.setProperty("title", "MC42 Slick/TWL Frontend");
 		try {
 			
 			defs.load(ClassLoader.getSystemResourceAsStream("resources/properties.ini"));

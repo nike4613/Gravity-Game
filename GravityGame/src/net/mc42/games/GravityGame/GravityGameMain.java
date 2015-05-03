@@ -1,94 +1,32 @@
 package net.mc42.games.GravityGame;
 
 import net.mc42.games.GameMain;
-import net.mc42.games.gui.BasicWidget;
-import net.mc42.games.gui.EventHandler;
-import net.mc42.games.gui.GUI;
-import net.mc42.games.gui.GUIs;
-import net.mc42.games.gui.menu.Button;
-import net.mc42.games.gui.menu.Menu;
-import net.mc42.games.gui.menu.MenuElement;
-import net.mc42.games.gui.menu.Select;
 import net.mc42.global.Global;
-import net.mc42.global.Pair;
-import net.mc42.global.Utils;
+import net.mc42.global.Ptr;
 
 import org.lwjgl.input.Keyboard;
-import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 
 public class GravityGameMain extends GameMain{
-
-	@EventHandler
-	public static void button1(GUI g,MenuElement m){
-		Global.log(Global.levels.DEBUG, "button1");
-	}
-	@EventHandler
-	public static void button2(GUI g,MenuElement m){
-		Global.log(Global.levels.DEBUG, "button2");
-	}
-	@EventHandler
-	public static void exitbutton(GUI g,MenuElement m) throws Exception{
-		Global.log(Global.levels.DEBUG,"Closing GUI " + g.getName());
-		GUIs.setActive(g.getName(), false);
-		Thread.sleep(1000);
-		GUIs.setActive("closeui", true);
-	}
-	@EventHandler
-	public static void closeGame(GUI g,MenuElement m){
-		Global.log(Global.levels.DEBUG, "closing program from button " + m.toString());
-		System.exit(0);
-	}
-	@EventHandler
-	public static void selectAct(GUI g, MenuElement m, Object obj){
-		Global.log(Global.levels.DEBUG, obj.toString());
-	}
 	
 	@Override
 	public void init(GameContainer gc) throws Exception {
 		
 		setExitKeyCombo(Keyboard.KEY_LCONTROL,Keyboard.KEY_Q);
-		new GUI("ui3", "testgui", new BasicWidget(), 0).setPos(10, 10, 300, 300);
-		new GUI( "mainui", "testgui", new Menu("Test Menu")
-			.setFont( gc.getGraphics().getFont() )
-			.setFontColor(Color.green)
-			.addElement(
-				new Button("button","Button-For-Testing!!!")
-				.setClickAction(Utils.getAnnotatedMethod(EventHandler.class, this.getClass(), "button1"))
-			) 
-			.addElement(
-				new Button("button","Button 2!!!")
-				.setClickAction(Utils.getAnnotatedMethod(EventHandler.class, this.getClass(), "button2"))
-			)
-			.addElement(
-				new Button("button","Close UI")
-				.setClickAction(Utils.getAnnotatedMethod(EventHandler.class, this.getClass(), "exitbutton"))
-			)
-		,0).setPos(50, 180, 300, 250);
-		new GUI( "closeui", "testgui", new Menu("Close")
-			.setFont( gc.getGraphics().getFont() )
-			.setFontColor(Color.red)
-			.addElement(
-				new Button("button","Close Game")
-				.setClickAction(Utils.getAnnotatedMethod(EventHandler.class, this.getClass(), "closeGame"))
-			)
-			.addElement(
-				new Select("select", 
-					new Pair("Hi!","fst"),
-					new Pair("Mid!","scnd"),
-					new Pair("Really?","thrd"),
-					new Pair("Lo!","lst")
-				)
-				.setAction(Utils.getAnnotatedMethod(EventHandler.class, this.getClass(), "selectAct"))
-			)
-			.addElement(
-				new Button("button","Close Game")
-				.setClickAction(Utils.getAnnotatedMethod(EventHandler.class, this.getClass(), "closeGame"))
-			)
-		,0,false).setPos(50, 180, 300, 250);
+		
+		Ptr<String> s = new Ptr<>("Hello there!");
+		
+		Global.log(Global.levels.DEBUG, s);
+		modify(s);
+		Global.log(Global.levels.DEBUG, s);
+		
 	}
 
+	private void modify(Ptr<String> pointer) throws Exception{
+		pointer.val = "Die!";
+	}
+	
 	@Override
 	public void update(GameContainer gc, int delta) throws Exception{
 		// TODO Auto-generated method stub

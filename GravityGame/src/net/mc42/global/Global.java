@@ -8,16 +8,16 @@ public class Global {
 	//public static Field mainShare;
 	//private static ExecutionEndThread end = new ExecutionEndThread();
 	
-	public static void log(Global.levels l, String msg){
-		logger.log(l, msg, null);
+	public static void log(Global.levels l, Object msg){
+		logger.log(l, msg.toString(), null);
 	}
 	
 	public static void log(Global.levels l, Exception error){
 		logger.log(l, null, error);
 	}
 	
-	public static void log(Global.levels l, String msg, Exception error){
-		logger.log(l, msg, error);
+	public static void log(Global.levels l, Object msg, Exception error){
+		logger.log(l, msg.toString(), error);
 	}
 	public static enum levels {
 		INFO ("Info"),
