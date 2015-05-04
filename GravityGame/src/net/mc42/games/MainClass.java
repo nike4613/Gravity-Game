@@ -145,6 +145,7 @@ public class MainClass extends BasicGame
 		Thread.currentThread().setName("execution");
 		Global.setDebugMode(props.getProperty("debugMode").contains("true"));
 		System.setProperty("org.lwjgl.opengl.Window.undecorated",props.getProperty("unDecorated"));
+		System.setProperty("java.protocol.handler.pkgs", "sun.net.www.protocol");
 		Global.log(Global.levels.DEBUG, "Beggining program");
 		
 		Enumeration<?> enumr = props.propertyNames();

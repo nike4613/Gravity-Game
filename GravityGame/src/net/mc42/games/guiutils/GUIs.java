@@ -1,7 +1,10 @@
 package net.mc42.games.guiutils;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.HashMap;
 
+import net.mc42.global.Global;
 import de.matthiasmann.twl.GUI;
 import de.matthiasmann.twl.Widget;
 import de.matthiasmann.twl.renderer.Renderer;
@@ -26,8 +29,31 @@ public class GUIs {
 		defaultTheme = def;
 		initI();
 	}
+	
+	/**
+	 * Sets the default theme.
+	 * @param theme The theme managet to use
+	 */
 	public static void setDefaultTheme(ThemeManager theme){
 		defaultTheme = theme;
+	}
+	
+	/**
+	 * Sets the default theme.
+	 * @param url The URL in the classpath 
+	 * @throws IOException 
+	 */
+	public static void setDefaultTheme(String url) throws IOException{
+		setDefaultTheme(Global.class.getClassLoader().getResource(url));
+	}
+	
+	/**
+	 * Sets the default theme.
+	 * @param url The URL object to theme XML file
+	 * @throws IOException 
+	 */
+	public static void setDefaultTheme(URL url) throws IOException{
+		setDefaultTheme(ThemeManager.createThemeManager(url, getRenderer()));
 	}
 	
 	private static void initI() throws Exception{
@@ -58,6 +84,10 @@ public class GUIs {
 	
 	public static void setRenderer(Renderer rend){
 		renderer = rend;
+	}
+	
+	public static Renderer getRenderer(){
+		return renderer;
 	}
 	
 	public static void update(){

@@ -1,8 +1,9 @@
 package net.mc42.games.GravityGame;
 
 import net.mc42.games.GameMain;
+import net.mc42.games.GravityGame.Widgets.TWLTestWidget;
+import net.mc42.games.guiutils.GUIs;
 import net.mc42.global.Global;
-import net.mc42.global.Ptr;
 
 import org.lwjgl.input.Keyboard;
 import org.newdawn.slick.GameContainer;
@@ -15,16 +16,11 @@ public class GravityGameMain extends GameMain{
 		
 		setExitKeyCombo(Keyboard.KEY_LCONTROL,Keyboard.KEY_Q);
 		
-		Ptr<String> s = new Ptr<>("Hello there!");
+		GUIs.setDefaultTheme("resources/gui/gameui.xml");
 		
-		Global.log(Global.levels.DEBUG, s);
-		modify(s);
-		Global.log(Global.levels.DEBUG, s);
+		GUIs.addGUI("test", new TWLTestWidget());
 		
-	}
-
-	private void modify(Ptr<String> pointer) throws Exception{
-		pointer.val = "Die!";
+	//	ThemeManager tm = ThemeManager.createThemeManager(new URL("classpath:resources/gui/theme.xml"), GUIs.getRenderer());
 	}
 	
 	@Override

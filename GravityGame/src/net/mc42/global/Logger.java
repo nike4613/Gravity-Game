@@ -13,16 +13,21 @@ class Logger implements ILogger{
 		
 		if(msg != null){
 			out += msg;
-			if(error != null){
+			if(error != null && l!=Global.levels.FATAL){
 				out += "\n" + prefix + error.toString();
 			}
 		} else if(error != null){
 			out += "Exception occured with error " + error.toString();
 		}
 		
-		if(l != Global.levels.DEBUG || Global.getDebugMode() == true)
-		System.out.println(out);
+		boolean printed = false;
+		if(l==Global.levels.FATAL){System.err.println(out);printed = true;}
+		if((l != Global.levels.DEBUG || Global.getDebugMode() == true) && !printed){
+			System.out.println(out);
+			printed = true;
+		}
 		if(error != null){
+			if(l==Global.levels.FATAL){ error.printStackTrace(); System.exit(1);}
 			StackTraceElement[] s = error.getStackTrace();
 			StringBuilder sb = new StringBuilder("                                                                                                                                                                                                                       ");
 			sb.setLength(prefix.length() + 3);
