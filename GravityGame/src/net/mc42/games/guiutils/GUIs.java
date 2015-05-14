@@ -91,13 +91,27 @@ public class GUIs {
 	}
 	
 	public static void update(){
-		for(int i=0;i<guis.keySet().size();i++)
-			guis.get(guis.keySet().toArray()[i]).update();
+		for(int i=0;i<guis.keySet().size();i++){
+			//guis.get(guis.keySet().toArray()[i]).handleInput();
+			GUI g = guis.get(guis.keySet().toArray()[i]);
+			//g.update();
+			g.setSize();
+			g.updateTime();
+			g.handleInput();
+			g.handleKeyRepeat();
+			g.handleTooltips();
+			g.updateTimers();
+			g.invokeRunables();
+		}
 	}
 	
 	public static void draw(){
-		for(int i=0;i<guis.keySet().size();i++)
-			guis.get(guis.keySet().toArray()[i]).draw();
+		for(int i=0;i<guis.keySet().size();i++){
+			GUI g = guis.get(guis.keySet().toArray()[i]);
+			g.validateLayout();
+			g.draw();
+			g.setCursor();
+		}
 	}
 	
 }

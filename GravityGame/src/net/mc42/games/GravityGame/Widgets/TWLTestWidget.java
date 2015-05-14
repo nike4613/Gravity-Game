@@ -1,5 +1,7 @@
 package net.mc42.games.GravityGame.Widgets;
 
+import org.newdawn.slick.util.Log;
+
 import de.matthiasmann.twl.Event;
 import de.matthiasmann.twl.FPSCounter;
 import de.matthiasmann.twl.ToggleButton;
@@ -52,6 +54,7 @@ public class TWLTestWidget extends Widget {
 		 if(super.handleEvent(evt)) {
 			 return true;
 		 }
+		 Log.debug("handleEvent");
 		 switch (evt.getType()) {
 		 	case KEY_PRESSED:
 		 		switch (evt.getKeyCode()) {

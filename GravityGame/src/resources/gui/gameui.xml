@@ -248,7 +248,7 @@
         <param name="visibleItems"><int>4</int></param>
     </theme>
     
-    <theme name="gameuidemo" ref="-defaults">
+    <theme name="twltestwidget" ref="-defaults">
         <param name="background"><image>background-image</image></param>
         
         <theme name="pingu-basher" ref="button">
@@ -305,7 +305,7 @@
         <theme name="" ref="*"/>
     </theme>
 
-    <theme name="gameuidemo2" ref="gameuidemo">
+    <theme name="gameuidemo2" ref="twltestwidget">
         <param name="defaultGap"><dimension>5,5</dimension></param>
         <param name="smallGap"><dimension>5,5</dimension></param>
         <param name="mediumGap"><dimension>10,10</dimension></param>
