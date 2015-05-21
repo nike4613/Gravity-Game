@@ -48,34 +48,26 @@ public class TileSet {
 		}
 	}
 	
-	public TileType getTile(int index){
-		synchronized(this){
-			return tiles.get(index);
-		}
+	public synchronized TileType getTile(int index){
+		return tiles.get(index);
 	}
 	
-	public int getLoadPercent(){
-		synchronized(this){
-			return loadPercent;
-		}
+	public synchronized int getLoadPercent(){
+		return loadPercent;
 	}
 	
-	private void loadTileInThread(int idx,int count) throws Exception{
+	private synchronized void loadTileInThread(int idx,int count) throws Exception{
 		int prcnt = 0;
 		int inc = (50/(2^4))/count;
 		for(int i=0;i<(2^4);i++){
 			getTile(idx).createTileIDX(i);
 			prcnt += inc;
-			synchronized(this){
-				loadPercent = prcnt;
-			}
+			loadPercent = prcnt;
 		}
 		for(int i=0;i<(2^4);i++){
 			getTile(idx).createTileIDX(i>>4);
 			prcnt += inc;
-			synchronized(this){
-				loadPercent = prcnt;
-			}
+			loadPercent = prcnt;
 		}
 	}
 	
@@ -101,16 +93,12 @@ public class TileSet {
 		
 	}
 	
-	public boolean isLoaded(int idx){
-		synchronized(this){
-			return tilesLoaded.get(idx);
-		}
+	public synchronized boolean isLoaded(int idx){
+		return tilesLoaded.get(idx);
 	}
 	
-	public boolean areAllLoaded(){
-		synchronized(this){
-			return alLoaded;
-		}
+	public synchronized boolean areAllLoaded(){
+		return alLoaded;
 	}
 	
 	public void loadTiles(){
