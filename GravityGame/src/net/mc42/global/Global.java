@@ -56,7 +56,7 @@ public class Global {
       int dep = depth+3;
 
       //System. out.println(ste[ste.length-depth].getClassName()+"#"+ste[ste.length-depth].getMethodName());
-      return ste[dep].getClassName() + "[" + ste[dep].getMethodName() + "]";
+      return ste[dep].getClassName() + "[" + ste[dep].getMethodName() + ":" + ste[dep].getLineNumber() + "]";
     }
 	
 	public static void setDepth(int i){

@@ -1,28 +1,20 @@
 package net.mc42.games.events;
 
-import net.mc42.global.Pair;
-
-import org.newdawn.slick.GameContainer;
+import net.mc42.global.utils.Pair;
 
 public class Event {
-	private GameContainer gc;
 	private EventType etype;
 	private int x;
 	private int y;
+	private int data = 0;
 	
-	public GameContainer getGameContainer(){
-		return gc;
-	}
 	
 	public EventType getType(){
 		return etype;
 	}
 	
-	public Event(GameContainer g, EventType e, int x, int y){
-		gc = g;
+	public Event(EventType e){
 		etype=e;
-		this.x=x;
-		this.y=y;
 	}
 	
 	public Pair<Integer,Integer> getPos(){
@@ -33,6 +25,15 @@ public class Event {
 	public Event setPos(Pair<Integer,Integer> pos){
 		x = pos.first;
 		y = pos.last;
+		return this;
+	}
+	
+	public int getData(){
+		return data;
+	}
+	
+	public Event setData(int d){
+		data = d;
 		return this;
 	}
 	

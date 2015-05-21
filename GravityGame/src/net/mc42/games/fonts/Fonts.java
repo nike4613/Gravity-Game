@@ -22,7 +22,7 @@ public class Fonts {
 	}
 	
 	public static void addFont(String name, String img) throws Exception{
-		fonts.put(name, new AngelCodeFont("/resources/font/"+name+".fnt", img));
+		addFont(new AngelCodeFont("/resources/font/"+name+".fnt", img),name);
 	}
 	public static void addFont(String name) throws Exception{
 		addFont(name, "/resources/font/"+name+".png");

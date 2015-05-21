@@ -5,7 +5,6 @@ import java.io.FileOutputStream;
 import java.util.Enumeration;
 import java.util.Properties;
 
-import net.mc42.games.guiutils.GUIs;
 import net.mc42.global.BaseClass;
 import net.mc42.global.Global;
 
@@ -16,12 +15,13 @@ import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.util.ResourceLoader;
 
-@BaseClass
-public class MainClass extends BasicGame
+@BaseClass 
+class MainClass extends BasicGame
 {	
 	
-	private static GameContainer globalShare;
+	protected static GameContainer globalShare;
 	public static Properties props;
 	private static GameMain mainObj;
 	
@@ -31,7 +31,7 @@ public class MainClass extends BasicGame
 		super(gamename);
 	}
 	
-	long exit=0;private void checkForceExit(GameContainer gc){long is=0,tmp=exit<<8;boolean down=true;while((tmp=(tmp>>8))!=0){is=(tmp&0xFF);down=down&&gc.getInput().isKeyDown((int)is);}if(down){System.exit(0);}}protected void setExitKeys(int... keys){int i=0,out=0;for(int key:keys){out|=key<<(i++*8);}exit=out;Thread t=new Thread(){public void run(){try{deInit();}catch(Exception e){}}};t.setName("deinit");Runtime.getRuntime().addShutdownHook(t);}
+	long exit=0;private void checkForceExit(GameContainer gc){long is=0,tmp=exit<<8;boolean down=true;while((tmp=(tmp>>8))!=0){is=(tmp&0xFF);down=down&&gc.getInput().isKeyDown((int)is);}if(down){API.Game.stop();}}protected void setExitKeys(int... keys){int i=0,out=0;for(int key:keys){out|=key<<(i++*8);}exit=out;Thread t=new Thread(){public void run(){try{deInit();}catch(Exception e){}}};t.setName("deinit");Runtime.getRuntime().addShutdownHook(t);}
 	
 	private static void deInit() throws Exception{
 		//Cleanup
@@ -80,7 +80,7 @@ public class MainClass extends BasicGame
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			Global.log(Global.levels.FATAL, "Could not initialize game!", e);
-			System.exit(1);
+			API.Game.stop();
 		}
 	}
 
@@ -117,10 +117,9 @@ public class MainClass extends BasicGame
 		Global.log(Global.levels.SEVERE, "Error in Game.render()", e);
 	}}
 
-	public static void main(String[] args)
+	public static void main(GameMain obj)
 	{
 		Properties defs = new Properties();
-		defs.setProperty("mainClass", "net.mc42.games.MainClass");
 		defs.setProperty("debugMode", "false");
 		defs.setProperty("unDecorated", "false");
 		defs.setProperty("fullscreen", "true");
@@ -166,7 +165,9 @@ public class MainClass extends BasicGame
 					if(ds.getHeight()>best.getHeight()&&ds.getWidth()>best.getWidth()) best = ds;
 				}
 			}
-			Global.log(Global.levels.DEBUG, "Display mode is as follows: " + best.toString());
+			//Global.log(Global.levels.DEBUG, "Display mode is as follows: " + best.toString());
+			
+			//ResourceLoader.addResourceLocation(new ClasspathLocation());
 			
 			AppGameContainer appgc = new AppGameContainer(new MainClass(props.getProperty("title")));
 			appgc.setDisplayMode(/*best.getWidth()*/640, /*best.getHeight()*/480, false);
@@ -180,12 +181,13 @@ public class MainClass extends BasicGame
 				Global.log(Global.levels.WARNING, "Error occured while setting icons... Continuing", e);
 			}
 			try{
-				Class<?> main = ClassLoader.getSystemClassLoader().loadClass(props.getProperty("mainClass"));
-				if (!(main.getSuperclass()==GameMain.class)) throw new Exception("Couldn't load class");
-				mainObj = (GameMain) main.newInstance();
+				mainObj = obj;
 			} catch (Exception e) {
 				Global.log(Global.levels.FATAL, "Could not locate execution class", e);
 			}
+			
+			Global.log(Global.levels.DEBUG, "Entering preinit stage...");
+			mainObj.preInit();
 			
 			appgc.start();
 		}

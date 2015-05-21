@@ -3,8 +3,8 @@ package net.mc42.games;
 import java.io.File;
 import java.io.FileOutputStream;
 
-import net.mc42.global.ByteString;
-import net.mc42.global.Pair;
+import net.mc42.global.utils.ByteString;
+import net.mc42.global.utils.Pair;
 
 import org.newdawn.slick.Image;
 

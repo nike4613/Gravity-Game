@@ -9,6 +9,6 @@ public class Handler extends URLStreamHandler {
 
     @Override
     protected URLConnection openConnection(URL u) throws IOException {
-        return Thread.currentThread().getContextClassLoader().getResource(u.getPath()).openConnection();
+        return getClass().getResource(u.getPath()).openConnection();
     }
 }

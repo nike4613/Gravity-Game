@@ -3,6 +3,8 @@ package net.mc42.global;
 import java.text.DateFormat;
 import java.util.Date;
 
+import net.mc42.games.API;
+
 class Logger implements ILogger{
 	public void log(Global.levels l, String msg, Exception error){
 		Date d = new Date(); 
@@ -21,20 +23,20 @@ class Logger implements ILogger{
 		}
 		
 		boolean printed = false;
-		if(l==Global.levels.FATAL){System.err.println(out);printed = true;}
+		if(l==Global.levels.FATAL||l==Global.levels.SEVERE||l==Global.levels.WARNING){System.err.println(out);printed = true;}
 		if((l != Global.levels.DEBUG || Global.getDebugMode() == true) && !printed){
 			System.out.println(out);
 			printed = true;
 		}
 		if(error != null){
-			if(l==Global.levels.FATAL){ error.printStackTrace(); System.exit(1);}
+			if(l==Global.levels.FATAL){ error.printStackTrace(); API.Game.stop();}
 			StackTraceElement[] s = error.getStackTrace();
 			StringBuilder sb = new StringBuilder("                                                                                                                                                                                                                       ");
 			sb.setLength(prefix.length() + 3);
 			for(StackTraceElement e:s){
-				System.out.println(sb.toString() + "in " + e.toString());	
+				if(l==Global.levels.SEVERE||l==Global.levels.WARNING)System.err.println(sb.toString() + "in " + e.toString());else System.out.println(sb.toString() + "in " + e.toString());
 			}
 		}
-		if(l==Global.levels.FATAL) System.exit(1);
+		if(l==Global.levels.FATAL) API.Game.stop();
 	}
 }
