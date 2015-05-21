@@ -96,7 +96,7 @@ public class TileType {
 		//Global.setDepth(0);
 	}
 	
-	void createTileIDX(int i) throws Exception{
+	synchronized void createTileIDX(int i) throws Exception{
 		//Global.setDepth(1);
 		Image borde = im.copy();
 		Graphics g = borde.getGraphics();
