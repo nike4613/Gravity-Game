@@ -2,8 +2,6 @@ package net.mc42.games.world;
 
 import java.util.ArrayList;
 
-import net.mc42.global.Global;
-
 import org.json.JSONObject;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -98,7 +96,7 @@ public class TileType {
 		//Global.setDepth(0);
 	}
 	
-	private void createTileIDX(int i) throws Exception{
+	void createTileIDX(int i) throws Exception{
 		//Global.setDepth(1);
 		Image borde = im.copy();
 		Graphics g = borde.getGraphics();

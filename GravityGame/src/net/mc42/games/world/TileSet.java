@@ -10,12 +10,16 @@ import net.mc42.global.Global;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.lwjgl.opengl.GLContext;
 import org.newdawn.slick.Image;
 
 public class TileSet {
 	
 	ArrayList<TileType> tiles;
+	ArrayList<Boolean> tilesLoaded;
 	Image tilesetImage;
+	protected int loadPercent = 0;
+	boolean alLoaded = false;
 	
 	public TileSet(URL jsonfile) throws Exception{
 		InputStream file = jsonfile.openStream();
@@ -29,6 +33,7 @@ public class TileSet {
 		JSONObject json = new JSONObject(jsonS);
 		
 		tiles = new ArrayList<TileType>();
+		tilesLoaded = new ArrayList<Boolean>();
 		
 		//Global.log(Global.levels.DEBUG, new File(jsonfile.getPath()).getParent() + "/" + json.getString("image"));
 		
@@ -39,11 +44,101 @@ public class TileSet {
 		for(int i=0;i<tils.length();i++){
 			JSONObject o = tils.getJSONObject(i);
 			tiles.add(i, new TileType(o, tilesetImage));
+			tilesLoaded.add(i, false);
 		}
 	}
 	
 	public TileType getTile(int index){
-		return tiles.get(index);
+		synchronized(this){
+			return tiles.get(index);
+		}
+	}
+	
+	public int getLoadPercent(){
+		synchronized(this){
+			return loadPercent;
+		}
+	}
+	
+	private void loadTileInThread(int idx,int count) throws Exception{
+		int prcnt = 0;
+		int inc = (50/(2^4))/count;
+		for(int i=0;i<(2^4);i++){
+			getTile(idx).createTileIDX(i);
+			prcnt += inc;
+			synchronized(this){
+				loadPercent = prcnt;
+			}
+		}
+		for(int i=0;i<(2^4);i++){
+			getTile(idx).createTileIDX(i>>4);
+			prcnt += inc;
+			synchronized(this){
+				loadPercent = prcnt;
+			}
+		}
+	}
+	
+	public void loadTile(int idx){
+		Thread t = new Thread(new Runnable(){
+
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				Thread.currentThread().setName("TileLoad");
+				try {
+					loadTileInThread(idx, 1);
+					synchronized(this){
+						tilesLoaded.set(idx, true);
+					}
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					Global.log(Global.levels.SEVERE, "Error while loading tileset textures", e);
+				}
+			}
+		});
+		t.start();
+		
+	}
+	
+	public boolean isLoaded(int idx){
+		synchronized(this){
+			return tilesLoaded.get(idx);
+		}
+	}
+	
+	public boolean areAllLoaded(){
+		synchronized(this){
+			return alLoaded;
+		}
+	}
+	
+	public void loadTiles(){
+
+		Thread t = new Thread(new Runnable(){
+
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				Thread.currentThread().setName("TileLoad");
+				try {
+					GLContext.loadOpenGLLibrary();
+					for(int i=0;i<tiles.size();i++){
+						loadTileInThread(i,tiles.size());
+						synchronized(this){
+							tilesLoaded.set(i, true);
+						}
+					}
+					synchronized(this){
+						alLoaded = true;
+					}
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					Global.log(Global.levels.SEVERE, "Error while loading tileset textures", e);
+				}
+			}
+		});
+		t.start();
 	}
 	
 }

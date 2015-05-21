@@ -21,7 +21,7 @@ public class GravityGameMain extends GameMain{
 		setExitKeyCombo(Keyboard.KEY_LCONTROL,Keyboard.KEY_Q);
 		
 		t = new TileSet(new URL("classpath:/resources/tilesets/tileset1.json"));
-		
+		t.loadTiles();
 		//GUIs.setDefaultTheme("resources/gui/gameui.xml");
 		
 		//GUIs.addGUI("test", new TWLTestWidget());
@@ -38,6 +38,9 @@ public class GravityGameMain extends GameMain{
 	public void render(GameContainer gc, Graphics g) throws Exception{
 		//t.getTile().draw(0, 0);
 		int x=0,y=0;
+		if(!t.areAllLoaded()){
+			g.drawString(t.getLoadPercent() + "", 15, 15);
+		} else
 		for(int i=0;i<=255;i++){
 			t.getTile(0).getTile(i).draw(x, y);
 			//Global.log(Global.levels.DEBUG, i);
