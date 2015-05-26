@@ -5,11 +5,13 @@ import java.net.URL;
 import net.mc42.games.API;
 import net.mc42.games.GameMain;
 import net.mc42.games.world.TileSet;
+import net.mc42.games.world.TileType;
 import net.mc42.global.Global;
 
 import org.lwjgl.input.Keyboard;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 
 public class GravityGameMain extends GameMain{
 	
@@ -21,7 +23,10 @@ public class GravityGameMain extends GameMain{
 		setExitKeyCombo(Keyboard.KEY_LCONTROL,Keyboard.KEY_Q);
 		
 		t = new TileSet(new URL("classpath:/resources/tilesets/tileset1.json"));
-		t.loadTiles();
+		//t.loadTile(0);
+		//t.loadTiles();
+		
+		noStoreProps.remove("showFps");
 		//GUIs.setDefaultTheme("resources/gui/gameui.xml");
 		
 		//GUIs.addGUI("test", new TWLTestWidget());
@@ -37,16 +42,20 @@ public class GravityGameMain extends GameMain{
 	@Override
 	public void render(GameContainer gc, Graphics g) throws Exception{
 		//t.getTile().draw(0, 0);
-		int x=0,y=0;
-		if(!t.areAllLoaded()){
+		int x=0,y=25;
+		Image tile = t.getTile().getTile(TileType.CORNER_TL);
+		tile.setFilter(Image.FILTER_NEAREST);
+		g.drawImage(tile.getScaledCopy(4),x,y);
+		/*if(!t.areAllLoaded()){
 			g.drawString(t.getLoadPercent() + "", 15, 15);
-		} else
-		for(int i=0;i<=255;i++){
+		} else*/
+		/*for(int i=0;i<=255;i++){
 			t.getTile(0).getTile(i).draw(x, y);
 			//Global.log(Global.levels.DEBUG, i);
 			x+=17;
-			if(x>=gc.getWidth()){x=0;y+=17;}
-		}
+			if(x+17>=gc.getWidth()){x=0;y+=17;}
+		}*/
+		
 	}
 	@Override
 	public void deInit() throws Exception {

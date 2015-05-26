@@ -8,16 +8,16 @@
 			"height":16
 		},
 		"border":{
-			"x":16,
-			"y":0,
+			"x":0,
+			"y":16,
 			"width":16,
-			"height":8
+			"height":1
 		},
 		"corner":{
-			"x":16,
-			"y":8,
-			"width":16,
-			"height":8
+			"x":0,
+			"y":16,
+			"width":1,
+			"height":1
 		}
 	}]
 }

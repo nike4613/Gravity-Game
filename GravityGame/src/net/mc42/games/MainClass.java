@@ -2,7 +2,9 @@ package net.mc42.games;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.Map.Entry;
 import java.util.Properties;
 
 import net.mc42.global.BaseClass;
@@ -15,7 +17,6 @@ import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.util.ResourceLoader;
 
 @BaseClass 
 class MainClass extends BasicGame
@@ -24,6 +25,7 @@ class MainClass extends BasicGame
 	protected static GameContainer globalShare;
 	public static Properties props;
 	private static GameMain mainObj;
+	protected static ArrayList<String> propsToNotStore = new ArrayList<>();
 	
 	
 	public MainClass(String gamename)
@@ -39,7 +41,15 @@ class MainClass extends BasicGame
 		Global.log(Global.levels.INFO, props.getProperty("exitLogMessage"));
 		try {mainObj.deInit();} catch (Exception e) {}
 		globalShare.exit();
-		props.store(new FileOutputStream(new File(System.getProperty("user.dir")+"/configs/properties.ini")), "Properties");
+		Properties p = new Properties();
+		
+		for(Entry<Object, Object> s:props.entrySet()){
+			String name = (String) s.getKey();
+			if(propsToNotStore.contains(name)) continue;
+			p.setProperty(name, (String) s.getValue());
+		}
+		
+		p.store(new FileOutputStream(new File(System.getProperty("user.dir")+"/configs/properties.ini")), "Properties");
 	}
 	
 	@Override
@@ -124,8 +134,9 @@ class MainClass extends BasicGame
 		defs.setProperty("unDecorated", "false");
 		defs.setProperty("fullscreen", "true");
 		defs.setProperty("fps", "60");
+		defs.setProperty("showFps", "false");
 		defs.setProperty("exitLogMessage", "Closing game...");
-		defs.setProperty("title", "MC42 Slick/TWL Frontend");
+		defs.setProperty("title", API.Info.toString());
 		try {
 			
 			defs.load(ClassLoader.getSystemResourceAsStream("resources/properties.ini"));
@@ -141,6 +152,13 @@ class MainClass extends BasicGame
 			Global.log(Global.levels.WARNING, "Failed to load properties... using defaults", e1);
 			props = defs;
 		}
+		MainClass.propsToNotStore.add("title");
+		MainClass.propsToNotStore.add("showFps");
+		MainClass.propsToNotStore.add("fps");
+		MainClass.propsToNotStore.add("fullscreen");
+		MainClass.propsToNotStore.add("unDecorated");
+		MainClass.propsToNotStore.add("exitLogMessage");
+		
 		Thread.currentThread().setName("execution");
 		Global.setDebugMode(props.getProperty("debugMode").contains("true"));
 		System.setProperty("org.lwjgl.opengl.Window.undecorated",props.getProperty("unDecorated"));
@@ -172,7 +190,8 @@ class MainClass extends BasicGame
 			AppGameContainer appgc = new AppGameContainer(new MainClass(props.getProperty("title")));
 			appgc.setDisplayMode(/*best.getWidth()*/640, /*best.getHeight()*/480, false);
 			appgc.setTargetFrameRate(/*best.getFrequency()*60*/Integer.parseInt(props.getProperty("fps")));
-			appgc.setShowFPS(false);
+			appgc.setShowFPS(props.getProperty("showFps").contains("true"));
+			//appgc.setShowFPS(true);
 			try {
 				//appgc.setIcon("resources/icon/gameIcon.png");
 				Global.log(Global.levels.DEBUG, "Setting application icons");

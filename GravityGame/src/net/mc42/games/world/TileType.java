@@ -10,10 +10,8 @@ public class TileType {
 	Image im;
 	ArrayList<Image> borders;
 	
-	Image imi;
-	Image imif;
-	Image imid;
-	Image imifd;
+	Image imBord;
+	Image imCorn;
 	
 	int textureX;
 	int textureY;
@@ -45,14 +43,18 @@ public class TileType {
 		JSONObject bordo = j.getJSONObject("corner");
 		//Global.setDepth(10);
 		if(bord!=null){
+			Image imif;
+			Image imifd;
 			imif = im.getSubImage(bord.getInt("x"),bord.getInt("y"),bord.getInt("width"),bord.getInt("height"));
 			imifd = im.getSubImage(bordo.getInt("x"),bordo.getInt("y"),bordo.getInt("width"),bordo.getInt("height"));
-			imi = new Image(textureW,textureH);
-			imid = new Image(textureW,textureH);
-			imi.getGraphics().drawImage(imif, 0, 0);
-			imi.setCenterOfRotation(textureW/2, textureH/2);
-			imid.getGraphics().drawImage(imifd, 0, 0);
-			imid.setCenterOfRotation(textureW/2, textureH/2);
+			imBord = new Image(textureW,textureH);
+			imCorn = new Image(textureW,textureH);
+			imBord.getGraphics().drawImage(imif, 0, 0);
+			imBord.setCenterOfRotation(textureW/2, textureH/2);
+			imBord.setFilter(Image.FILTER_NEAREST);
+			imCorn.getGraphics().drawImage(imifd, 0, 0);
+			imCorn.setCenterOfRotation(textureW/2, textureH/2);
+			imCorn.setFilter(Image.FILTER_NEAREST);
 			for(int i=0;i<256;i++){borders.add(new Image(0,0));}
 			/*for(int i=0;i<=255;i++){
 				Image borde = new Image(textureW,textureH);
@@ -96,49 +98,49 @@ public class TileType {
 		//Global.setDepth(0);
 	}
 	
-	synchronized void createTileIDX(int i) throws Exception{
+	void createTileIDX(int i) throws Exception{
 		//Global.setDepth(1);
 		Image borde = im.copy();
 		Graphics g = borde.getGraphics();
 		if((i&SIDE_TOP)>0){
-			imi.setRotation(0);
-			g.drawImage(imi, 0, 0);
+			imBord.setRotation(0);
+			g.drawImage(imBord, 0, 0);
 		}
 		if((i&SIDE_LEFT)>0){
-			imi.setRotation(270);
-			g.drawImage(imi, 0, 0);
+			imBord.setRotation(270);
+			g.drawImage(imBord, 0, 0);
 		}
 		if((i&SIDE_RIGHT)>0){
-			imi.setRotation(90);
-			g.drawImage(imi, 0, 0);
+			imBord.setRotation(90);
+			g.drawImage(imBord, 0, 0);
 		}
 		if((i&SIDE_BOTTOM)>0){
-			imi.setRotation(180);
-			g.drawImage(imi, 0, 0);
+			imBord.setRotation(180);
+			g.drawImage(imBord, 0, 0);
 		}
 		if((i&CORNER_TL)>0){
-			imid.setRotation(0);
-			g.drawImage(imid, 0, 0);
+			imCorn.setRotation(0);
+			g.drawImage(imCorn, 0, 0);
 		}
 		if((i&CORNER_TR)>0){
-			imid.setRotation(270);
-			g.drawImage(imid, 0, 0);
+			imCorn.setRotation(270);
+			g.drawImage(imCorn, 0, 0);
 		}
 		if((i&CORNER_BL)>0){
-			imid.setRotation(90);
-			g.drawImage(imid, 0, 0);
+			imCorn.setRotation(90);
+			g.drawImage(imCorn, 0, 0);
 		}
 		if((i&CORNER_BR)>0){
-			imid.setRotation(180);
-			g.drawImage(imid, 0, 0);
+			imCorn.setRotation(180);
+			g.drawImage(imCorn, 0, 0);
 		}
-		borders.add(i, borde);
+		borders.set(i, borde);
 		//Global.setDepth(0);
 	}
 	
 	public Image getTile(int border) throws Exception{
-		if(borders.get(border).getHeight()==0) createTileIDX(border);
-		return borders.get(border);
+		if(borders.get(border).getHeight()<1||borders.get(border).getWidth()<1) createTileIDX(border);
+		return borders.get(border).copy();
 	}
 	public Image getTile() throws Exception{
 		return getTile(0);
